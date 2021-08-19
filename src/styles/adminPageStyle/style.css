@@ -1,0 +1,172 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    max-width: 100%;
+}
+
+main {
+    /* background-color: turquoise; */
+    min-width: 100%;
+    max-width: 100vh;
+    min-height: 100vh;
+}
+
+
+/* Header-navbar */
+header {
+    max-width: 100%;
+   
+}
+
+/* .navbar, .container-fluid{
+    padding: 0;
+    margin: 0;
+
+
+} */
+
+
+.admin__nav__account{
+   
+    /* min-width: 15vh; */
+    margin-left: 3vh;
+}
+.admin__nav__account__name {
+    display: flex;
+    margin: 0 auto;
+    min-width: 27vh;
+  
+}
+
+/* .navbar-brand{
+    padding-left: 4vh;
+} */
+
+
+#admin__btn{
+margin-left: 5vh;
+    padding: 0;
+    display: flex;
+    align-items: flex-end;
+
+}
+
+
+
+
+
+/* Left-Menu */
+.admin__left__menu{
+    background-color: rgb(37, 35, 41);
+    color: white;
+     /* width: 30vh; */
+    min-height: 100vh; 
+    padding-top: 2vh;
+  }
+  .admin__left__menu__dropdown{
+    margin-bottom: 2vh;
+  }
+  .admin__left__menu__dropdown__img{
+    display: flex;
+}
+  .admin__left__menu__dropdown__text{
+    font-size: small;
+    display: flex;
+    margin: 0;
+  }
+  .admin__left__menu__dropdown__btn{
+    display: block; 
+    background-color: rgb(37, 35, 41);
+    width: 20vh;
+    color: white;
+}  
+@media (max-width: 1700px) {
+   
+    .admin__left__menu__dropdown__btn{
+        width: 22vh;
+    }
+  }
+
+
+@media (max-width: 1200px) {
+   
+    .admin__left__menu__dropdown__btn{
+        width: 15vh;
+    }
+  }
+
+
+  @media (max-width: 900px) {
+    .admin__left__menu__dropdown__text{
+        display: none;
+    }
+    .admin__left__menu__dropdown__img{
+        display: none;
+    }
+    .admin__left__menu__dropdown__btn{
+        width: 10vh;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .admin__left__menu__dropdown__text{
+        display: none;
+    }
+   
+    .admin__left__menu__dropdown__btn{
+        width: 5vh;
+    }
+  }
+
+
+
+
+  /*  FOOTER */
+ footer {
+    background-color: rgb(37, 35, 41);
+    margin: 0;
+    padding: 0;
+    /* height: 50vh; */
+    
+}
+
+.footer__container{
+
+}
+.admin__footer__allUsers__block, .admin__footer__allInProgressTasks__block, .admin__footer__allFinishedTasks__block{
+    margin: 0;
+    padding: 0;
+    /* font-size: small; */
+    /* width: 45vh; */
+    color: white;
+}
+.admin__footer__allUsers__text, .admin__footer__allInProgressTasks__text, .admin__footer__allFinishedTasks__text{
+    margin: 0;
+    padding: 0;
+    font-size: small;
+    /* text-align: center; */
+    color: white;
+}
+
+
+
+
+/* admin__form__addUser__btn */
+.admin-form__label {
+    padding: 0;
+}
+
+.admin-form{
+    margin: 1vh;
+}
+
+
+/* ADMIN FORM TABLE REGISTRED USERS */
+/* .admin__registredusers__btn__delete{
+    font-size: small;
+    height: 4vh;
+    text-align: center;
+} */

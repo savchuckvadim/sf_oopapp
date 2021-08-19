@@ -1,0 +1,203 @@
+<!-- <body class="bg-light ">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">SimpleTODO</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar__account col-md-2 offset-md-9 d-flex justify-content-end">
+                <img src="/src/img/account_circle_black_24dp.svg" alt="">
+                <button id="admin__btn" class="btn "><img src="/src/img/logout_black_24dp.svg" alt=""><a href="">Выход</a></button>
+            </div>
+
+        </div>
+        </div>
+
+    </nav>
+    <div class="container-fluid d-flex flex-direction-column ">
+        <div class="col col-md-2 admin__panel">sdavsdvsadv</div>
+        <div class="col col-md-10 admin__main" id="admin__wrapper">
+            
+        </div>
+        
+        <div id="allUsers">
+        
+        </div>
+    </div>
+    
+</body> -->
+<!-- <script src="../models/adminUser.js"></script> -->
+
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-light bg-light">
+
+            <div class="container-fluid">
+                <a class="navbar-brand col-md-2" href="#">SimpleTODO</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div id="navbarSupportedContent" class="collapse navbar-collapse ">
+
+                    <div
+                        class="navbar__account  col-md-3 col-sm-4 offset-md-9 offset-sm-1 d-flex justify-content-md-end justify-content-sm-start align-items-md-center align-items-sm-end">
+                        <div class="admin__nav__account d-flex">
+                            <img class="admin__nav__account__icon" src="../img/adminPage/person-circle.svg  " alt="person-avatar">
+                            <p class="admin__nav__account__name nav-item"> Admin Admin</p>
+                        </div>
+                        <button id="admin__btn" class="btn "> <img src="../img/adminPage/logout_black_24dp (1).svg" alt=""> <a
+                                href="">Выход</a></button>
+                    </div>
+                </div>
+
+
+                
+            </div>
+
+
+        </nav>
+
+    </header>
+
+
+
+    <main>
+        <div class="container-fluid">
+            <div class="row row__admin__main__content">
+                <!-- LEFT MENU -->
+                <div class="admin__left__menu col-2 d-flex justify-content-start flex-column">
+
+                    <div class="dropdown">
+                        <div class="btn-group dropend">
+                            <button type="button" class="admin__left__menu__dropdown__btn btn dropdown-toggle"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <div
+                                    class="admin__left__menu__dropdown d-flex justify-content-start flex-row align-items-center">
+                                    <img class="admin__left__menu__dropdown__img " src="../img/adminPage/menu_white_24dp.svg"
+                                        alt="img-menu">
+                                    <p class="admin__left__menu__dropdown__text">Menu</p>
+
+                                </div>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <!-- Dropdown menu links -->
+                                <li><a class="dropdown-item" href="#">
+                                        <p class="admin__left__menu__users d-flex">Пользователи</p>
+                                    </a></li>
+                                <li><a class="dropdown-item" href="#">
+                                        <p class="admin__left__menu__tasks d-flex">Задачи</p>
+                                    </a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- Functional content  -->
+                <div id="admin__wrapper" class="admin__main__wrapper col-10   ">
+                    <!-- При нажатии на пользователя: -->
+                    <!-- <p>создается динамически</p> -->
+
+                    <form id="admin-form" class="admin-form">
+                        <h3>Форма для регистрации и удаления пользователей</h3>
+                        <div class="row mb-1 d-flex flex-row">
+                            <label for="#admin-form" class="admin-form__label col-xs-12 col-lg-4"> <input id="admin__form__input__login"
+                                    class="form-control " name="login" autocomplete="username" type="text"
+                                    placeholder="Login" aria-label="Login"></label>
+                            <label for="#admin-form" class="admin-form__label col-xs-12 col-lg-4"><input id="admin__form__input__password"
+                                    class="form-control me-2" name="password" autocomplete="current-password"
+                                    type="password" placeholder="Password" aria-label="Password"></label>
+                            <button id="registr-btn"
+                                class="admin__form__addUser__btn btn btn-outline-info col-xs-12 col-lg-4"
+                                type="submit">Зарегистрировать
+                                пользователя</button>
+                        </div>
+                    </form>
+
+                    <div id="admin__users__wrapper" class="admin__users__wrapper">
+
+
+
+
+
+                        <!-- <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Login</th>
+                                    <th scope="col">Password</th>
+
+                                    <th scope="col">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="admin__table__allDataOfUser">
+                                    <th class="admin__table__numberOfUser" scope="row">1</th>
+                                    <td class="admin__table__loginOfUser">Mark</td>
+                                    <td class="admin__table__passwordOfUser">Otto</td>
+
+                                    <td><input class="admin__registredusers__btn__delete btn btn-danger btn-sm col-sm-6 col-md-5 col-lg-4" disabled
+                                            type="button" value="Удалить"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">2</th>
+                                    <td>Jacob</td>
+                                    <td>Thornton</td>
+
+                                    <td><input class="admin__registredusers__btn__delete btn btn-danger btn-sm col-sm-6 col-md-5 col-lg-4" disabled
+                                        type="button" value="Удалить"></td>
+                                </tr>
+
+                            </tbody>
+                        </table> -->
+
+
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+    </main>
+
+
+
+
+
+    <footer>
+        <div class="footer__container container-fluid">
+            <div class="footer__row row d-flex flex-row justify-content-md-between ">
+                <div class="admin__footer__allUsers__block           col-xlg-10 col-lg-6 col-md-5 col-sm-">
+                    <p class="admin__footer__allUsers__text">Количество зарегестрированных пользователей: 560</p>
+                </div>
+                <div class="admin__footer__allInProgressTasks__block col-xlg-1 col-lg-3 col-md-4 col-sm-12">
+                    <p class="admin__footer__allInProgressTasks__text ">Количество задач в работе: 1890</p>
+                </div>
+                <div class="admin__footer__allFinishedTasks__block   col-xlg-1 col-lg-3 col-md-3 col-sm-12 ">
+                    <p class="admin__footer__allFinishedTasks__text">Количество завершенных задач: 5789 </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+
+
+
+
+</body>

@@ -1,1 +1,95 @@
-<h1>Your tasks here</h1>
+<body id="body" class="body">
+    <header>
+        <nav class="user__header__navbar navbar ">           
+            <div class="btn-group user__header__navbar__container__fluid btn-group container-fluid d-flex justify-content-end  justify-content-sm-between">
+                <a id="brand" class="user__header__navbar__brand navbar-brand col-md-2" href="#">Иван Иванов Kanban Board</a>
+                <div class="user__header__navbar__dropdown dropdown">
+                <button type="button" class="user__header__dropdown__btn btn dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
+                    <img class="user__header__navbar__account__icon" src="../img/userPage/person-circle.svg"
+                    alt="person-avatar">
+                </button>
+                <ul class="user__header__navbar__dropdown__menu dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                    <li><a class="user__header__navbar__dropdown__item dropdown-item" href="#"><button id="user__btn__profile"  class="btn__out ">Profile
+                        </button></a></li>
+
+                    <li> <a class="user__header__navbar__dropdown__item dropdown-item" href=""><button id="admin__btn" class="btn__out ">Log
+                                out</button></a></li>
+                </ul>
+              </div>
+            </div>
+        </nav>
+
+    </header>
+
+    <main>
+        <div class="kanban">
+            <!-- <div class="container">
+                <div class="row">
+                    <div class="kanban__head col-md-12 d-flex justify-content-start">
+                        <h2>Kanban Board</h2>
+                    </div>
+                </div>
+    
+            </div> -->
+            <!-- <div class="container container__tasks"> -->
+            <div id="kanban__content"
+                class="row d-flex justify-content-between align-items-center align-items-md-start flex-column flex-md-row">
+                <!-- <div id="kanban__Ready" class="kanban__ready col-md-3 d-flex justify-content-start flex-column">
+    
+    
+                    </div>
+                    <div id="kanban__InProgress"  class="kanban__doing col-md-3 d-flex justify-content-start flex-column">
+                       
+                    </div>
+                    <div id="kanban__Finished" class="kanban__done col-md-3 d-flex justify-content-start flex-column">
+                       
+                    </div> -->
+            </div>
+            <!-- </div> -->
+
+
+        </div>
+
+
+        </div>
+    </main>
+    <!-- dropDown -->
+
+    <!-- <div id="myModal" class="modal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Modal title</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+    </div> -->
+
+    <footer>
+        <div class="footer__container container-fluid">
+            <div class="footer__row row d-flex flex-row justify-content-md-between ">
+                <div class="admin__footer__allInProgressTasks__block col-xlg-1 col-lg-3 col-md-4 col-sm-12">
+                    <p class="admin__footer__allInProgressTasks__text ">Количество задач в работе: 1890</p>
+                </div>
+                <div class="admin__footer__allInProgressTasks__block col-xlg-1 col-lg-3 col-md-4 col-sm-12">
+                    <p class="admin__footer__allInProgressTasks__text ">Количество задач в работе: 1890</p>
+                </div>
+                <div class="admin__footer__allFinishedTasks__block   col-xlg-1 col-lg-3 col-md-3 col-sm-12 ">
+                    <p class="admin__footer__allFinishedTasks__text">Kanban Board by Ivan Ivanov </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+
+    
+</body>
