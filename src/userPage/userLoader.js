@@ -38,8 +38,10 @@ import { createTasksBlocks } from "./utilsForUsers.js";
 
 
 
+import { changeState, out } from "../utils.js";
+import { loadMainPage } from "../mainPage/mainPage.js";
 
-
+import { app, appState, createAdminUser } from "../app.js";
 
 
 
@@ -56,7 +58,13 @@ import { createTasksBlocks } from "./utilsForUsers.js";
 export function userLoader(){
  
     renderUserPage()
-    createTasksBlocks();
+    createTasksBlocks(appState);
+    const btnOut = document.getElementById('admin__btn');
+    // btnOut.addEventListener('click', () => {
+    //     out()
+    //     changeState()
+    //     app()
+    // })
 }
 
 

@@ -12,7 +12,7 @@ let readyTasks;
 let inProgressTasks;
 let finishedTasks;
 
-
+import app from "../app"
 export var tasksBlocks = [];
 
 let draggedItem = null;
@@ -34,7 +34,7 @@ function kanbanOut() {
     app();
 }
 
-export function createTasksBlocks() {
+export function createTasksBlocks(appState) {
 
 
 
@@ -42,6 +42,7 @@ export function createTasksBlocks() {
         // console.log();
         tasksBlocks[i] = new Tasks(statusNames[i], i);
         tasksBlocks[i].renderTasks();
+        tasksBlocks[i].setUsersId (appState)
         console.log(tasksBlocks[i])
 
     }
@@ -176,15 +177,13 @@ export function handlerDrop(event) {
 
 
             }
-            console.log('Общий родительский элемент')
+            
         }
 
 
     } else {
         this.append(draggedItem)
-        // console.log(draggedItem)
-        // console.log(droppedIndex)
-
+        
         console.log('разные родительские элементы')
         transferTasks(tasksBlocks[0], 1, 2);
         transferTasks(tasksBlocks[1], 0, 2);
@@ -263,6 +262,18 @@ export function createAndDeleteTask(oldTask, block, otherBlockIndex) { //(объ
 
 }
 
+//создаётся задача из блока
+//в блоке указан id пользователя
+//при создании и редактировании задачи для записи в localStorage  программа берет id пользователя из blocka
+//находит по этому id пользователя в users и в него вносит изменения
+//блоки создаются...
+export const addTaskToStorage = function (obj, key, appState) {
+
+    //получить id appState.currentUser
+    const storageData = getFromStorage(key);
+    storageData.push(obj);
+    localStorage.setItem(key, JSON.stringify(storageData));
+};
 
 export {
     readyTasks,

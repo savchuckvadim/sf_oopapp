@@ -14,6 +14,8 @@ import index from "../index.html"
 
 import { readyTasks } from '../userPage/utilsForUsers.js';
 import { tasksBlocks } from '../userPage/utilsForUsers.js';
+import { getFromStorage } from '../utils.js';
+import { appState } from '../app.js';
 
 
 export const statusNames = ['Ready', 'InProgress', 'Finished'];
@@ -27,6 +29,7 @@ export class Tasks {
         this.status = status;
         this.dataZoneNumber = dataZoneNumber;
         this.tasks = [];
+        this.usersId = ''
         this.counter = this.tasks.length;
 
         //this.taskAddBtn = document.createElement('#task__add--button');  // кнопка должна создавать new Task
@@ -256,7 +259,7 @@ export class Tasks {
                             // createAndDeleteTask(el, this, this.tasksCardsDiv.getAttribute('data-zone'))
 
                             let index = element.value
-                            console.log('index'+ index)
+                            
                             
                    
 
@@ -318,13 +321,18 @@ export class Tasks {
     actualityDataItem () {
         this.tasks.forEach((element, index) => {
             element.div.setAttribute('data-item', index)
-            console.log(element.div)
+           
 
 
         })
     }
 
 
+    setUsersId (appState) {
+        if (!this.usersId){
+            this.usersId = appState.currentUser.id;
+        }
+    }
 
     set task(obj) {
 

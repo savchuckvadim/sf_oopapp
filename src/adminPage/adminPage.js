@@ -245,7 +245,7 @@ export function registrNewUser() {
     })
 }    
 
-    
+    ///////////////////////TODO возможно заменить на  authUser()
     function existUser(login, password) {     // проверяет существует ли пользователь в users.localStorage
         let existUser = false;
         let users = getFromStorage('users');

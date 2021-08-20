@@ -65,25 +65,19 @@ export const appState = new State();
 
 export var users = getFromStorage('users'); // берет из localstorage массив пользователей выводит л-п каждого в консоль
 
-console.log('appState')
-console.log(appState)
+
 
 export function app() {
-  // changeState();
-  console.log('appState')
-  console.log(appState)
+  
   createAdminUser();
   changeState();
   pageLoader();
-  console.log('appState')
-  console.log(appState)
+  
 }
 
 
 app();
-console.log('appState')
 
-console.log(appState)
 
 
 // loadMainPage();
@@ -118,7 +112,7 @@ export function pageLoader() {
 
 //  pageLoader();
 // loadMainPage();
-console.log(appState)
+
 
 //Если в users.LocalStorage нету админа - создаёт админа 
 //Проверяет State на наличие CurrentUser  в зависимости от результата запускает загрузчик страницы и скриптов:

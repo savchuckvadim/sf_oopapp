@@ -71,13 +71,9 @@ export function loadMainPage(app) {
         // window.alert('loginForm.addEventListener');
         //loadUsersAccount(login, password); //загружает HTML по введенным данным пользователя если auth = true
         addCurrentUser(login);
-        console.log('appState in LoadPage')
-
-        console.log(appState)
+        
         changeState(); //меняет состояние на текущий пользователь, если он существует
-        console.log('appState in LoadPage')
-
-        console.log(appState)
+       
         app();
         //  state();       // включает логику приложения в зависимости от Состояния
         //adminUserBtn(appState.currentUser); 

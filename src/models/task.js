@@ -215,8 +215,7 @@ export class Task {
         block.tasks.forEach((element, index) => {
             element.div.setAttribute('data-item', index)
             element.number = index
-            console.log(element.div.getAttribute('data-item'))
-            console.log(element.number)
+            
         })
         // this.block.tasksCardsDiv.removeChild(this.div)
         // к этой кнопке будет обращаться кнопка удаления
