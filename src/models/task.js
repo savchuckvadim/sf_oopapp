@@ -2,7 +2,11 @@
 import { Tasks } from "./tasksBlocks.js";
 
 import { createTasksBlocks } from "../userPage/userLoader.js"
-import { createTask, tasksBlocks,  addBlocksofTasksInLocalStorage, testAddToLocalStorage  } from '../userPage/utilsForUsers.js';
+import { createTask, 
+    tasksBlocks,  
+    addBlocksofTasksInLocalStorage, 
+    testAddToLocalStorage, 
+    searchBlock  } from '../userPage/utilsForUsers.js';
 
 
 import { handlerDragStart } from '../userPage/utilsForUsers.js';
@@ -17,7 +21,7 @@ export class Task {
         this.number = number;
         // this.value = value;
         this.status = status;
-        this.block = block;
+        // this.block = block;
         this.value = '';
 
         this.userId = ''
@@ -116,10 +120,7 @@ export class Task {
                 this.submit.style.display = 'none'
                 addCard(this.status);
 
-                let newAllUsers = addBlocksofTasksInLocalStorage(this);
-                testAddToLocalStorage(newAllUsers)
                 
-                // localStorage.setItem('users', JSON.stringify(addBlocksofTasksInLocalStorage(tasksBlocks)));
                  
 
                  
@@ -150,8 +151,8 @@ export class Task {
         this.submitDelete.addEventListener('click', (e) => {
             e.preventDefault()
             
-            this.deleteTask(this.block)
-            this.block.addCardDisplay()
+            this.deleteTask() ///////////вместо this.block надо будет вставлять результат поиска из массива taskBlocks по статусу
+            this.block().addCardDisplay()
             
          })
 
@@ -177,8 +178,9 @@ export class Task {
                 this.divSubmits.style.display = 'none';
                 this.submitDelete.style.display = 'none';
                 this.submit.style.display = 'none'
-                localStorage.setItem('tasks', JSON.stringify(this))
+               
                 window.alert('this.submit')
+                
                 // addBlocksofTasksInLocalStorage(this.block);
             })
 
@@ -199,6 +201,7 @@ export class Task {
         // console.log(this.userId)
 
         
+        
     }
 
 
@@ -208,12 +211,17 @@ export class Task {
         this.p.innerText = value;
         this.input.value = value;
         this.value = value;
+        testAddToLocalStorage(this.userId) //записывает в localStorage
 
     }
 
 
-    deleteTask(block) {
+    deleteTask() {
 
+        
+       
+        let block = this.block();
+       
        
         this.div.remove();
         this.form.remove()
@@ -235,7 +243,7 @@ export class Task {
         })
         // this.block.tasksCardsDiv.removeChild(this.div)
         // к этой кнопке будет обращаться кнопка удаления
-       
+         testAddToLocalStorage(this.userId) //записывает в localStorage
     }
 
 
@@ -249,6 +257,17 @@ export class Task {
         this.userId = userId;
     }
 
+    block() {
+
+        let block
+        tasksBlocks.forEach((element) => {
+            if (element.status == this.status){
+                block = element
+                
+            }
+        })
+        return block
+    }
     //TODO
     // 1.создание формы задачи: input и submit
     // 2.отрисовывание формы

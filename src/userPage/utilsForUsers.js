@@ -182,6 +182,8 @@ export function handlerDrop(event) {
             
         }
 
+        console.log('dropped one parents')
+        console.log(tasksBlock)
 
     } else {
         this.append(draggedItem)
@@ -283,39 +285,45 @@ export {
     finishedTasks
 }
 
-export function addBlocksofTasksInLocalStorage (task) {
+export function addBlocksofTasksInLocalStorage (userId) {
     
     //берем массив пользователей из localStorage
     let allUsers = getFromStorage('users');
     let foundUser = false
     
-    allUsers.forEach((element) => {
-       
-        if(element.id == task.userId){
-            
-            foundUser = element           //находим нужного юзера
+    for(let i = 0; i < allUsers.length; i++){
+        if(allUsers[i].id == userId){
+            allUsers[i].tasks = tasksBlocks
         }
-    }) 
+    }
+    
 
-    console.log(foundUser)
-     foundUser.tasks[task.number] = task;
-//foundUser - отдельная переменная надо ее вставить заместо element обратно?
-  
-    //  localStorage.setItem('users', JSON.stringify(allUsers))
-    console.log(allUsers)
-    console.log(foundUser)
-    // localStorage.removeItem('users')
-    // localStorage.setItem('users', JSON.stringify(allUsers))
     return (allUsers)
     // return foundUser
 }
-export function startTest () {
-    testAddToLocalStorage()
-}
-export function testAddToLocalStorage(){
 
-    localStorage.setItem('tasks', JSON.stringify('tasks'))
+
+export function testAddToLocalStorage(userId){
+
+    let newTasksBlocks = addBlocksofTasksInLocalStorage(userId)
+    localStorage.setItem('users', JSON.stringify(newTasksBlocks))
 }
 console.log()
 // localStorage.removeItem('users');
 // localStorage.setItem('users', JSON.stringify(allUsers))
+
+
+// export function searchBlock(taskStatus) {
+//     tasksBlocks.forEach((element) => {
+//         if (element.status == taskStatus){
+//             console.log('searchBlock')
+//             console.log(element.tasks)
+//             return element
+//         }
+//     })
+// }
+// let test = searchBlock('Ready');
+// console.log(test)
+// export function searchTask (searchBlock, taskStatus){
+//     console.log(searchBlock(taskStatus).tasks)
+// }

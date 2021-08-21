@@ -98,15 +98,15 @@ export class Tasks {
 
     };
 
-    deleteLastTask(){ //удаляет последнюю задачу из массива
-        if(this.tasks != []){
+    // deleteLastTask(){ //удаляет последнюю задачу из массива
+    //     if(this.tasks != []){
 
-            this.tasks.pop();
+    //         this.tasks.pop();
 
-        }else{
-            return false
-        }
-    };
+    //     }else{
+    //         return false
+    //     }
+    // };
 
     renderTasks() { //отрисовывает div, содержащий все задачи и +addCard
         if (this.div) {
@@ -165,20 +165,22 @@ export class Tasks {
             this.addCardDisplay();
         })
 
-        
+        testAddToLocalStorage(this.usersId) //записывает в localStorage
         return task
     }
 
     renderCreatedTask(createdTask) {
         this.tasks[this.tasks.length - 1].renderTask(this.tasksCardsDiv);
-        
+        testAddToLocalStorage(this.usersId) //записывает в localStorage
+
         
        
     }
     renderTransitionTask() {
         
         this.tasksCardsDiv.appendChild(this.tasks[this.tasks.length - 1].div)
-        
+        testAddToLocalStorage(this.usersId) //записывает в localStorage
+
 
         
 
