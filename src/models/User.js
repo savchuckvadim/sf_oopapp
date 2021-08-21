@@ -12,6 +12,7 @@ export class User extends BaseModel {
     this.login = login;
     this.password = password;
     this.storageKey = "users";
+    this.tasks = []
   }
   get hasAccess() {
     

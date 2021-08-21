@@ -67,7 +67,7 @@ export var users = getFromStorage('users'); // берет из localstorage ма
 
 
 
-export function app() {
+export function startApp() {
   
   createAdminUser();
   changeState();
@@ -76,7 +76,7 @@ export function app() {
 }
 
 
-app();
+startApp();
 
 
 
@@ -101,7 +101,7 @@ export function pageLoader() {
 
   } else {
     // fieldHTMLContent = mainPage;
-    loadMainPage(app)
+    loadMainPage(startApp)
     //загрузка страницы авторизации
 
   }

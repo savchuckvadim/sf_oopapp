@@ -1,8 +1,8 @@
 
 import { Tasks } from "./tasksBlocks.js";
-import { tasksBlocks } from "../userPage/userLoader.js";
+
 import { createTasksBlocks } from "../userPage/userLoader.js"
-import { createTask } from '../userPage/utilsForUsers.js';
+import { createTask, tasksBlocks,  addBlocksofTasksInLocalStorage, testAddToLocalStorage  } from '../userPage/utilsForUsers.js';
 
 
 import { handlerDragStart } from '../userPage/utilsForUsers.js';
@@ -20,6 +20,8 @@ export class Task {
         this.block = block;
         this.value = '';
 
+        this.userId = ''
+        
 
         this.form = document.createElement('form'); //создаёт форму задачи
         this.p = document.createElement('p');
@@ -114,7 +116,13 @@ export class Task {
                 this.submit.style.display = 'none'
                 addCard(this.status);
 
+                let newAllUsers = addBlocksofTasksInLocalStorage(this);
+                testAddToLocalStorage(newAllUsers)
+                
+                // localStorage.setItem('users', JSON.stringify(addBlocksofTasksInLocalStorage(tasksBlocks)));
+                 
 
+                 
             })
 
             
@@ -169,10 +177,13 @@ export class Task {
                 this.divSubmits.style.display = 'none';
                 this.submitDelete.style.display = 'none';
                 this.submit.style.display = 'none'
+                localStorage.setItem('tasks', JSON.stringify(this))
+                window.alert('this.submit')
+                // addBlocksofTasksInLocalStorage(this.block);
             })
 
 
-
+            
         })
 
         // this.input.addEventListener('change', () => {
@@ -183,6 +194,11 @@ export class Task {
 
        
 
+        // console.log(this.block)
+        // console.log(tasksBlocks)
+        // console.log(this.userId)
+
+        
     }
 
 
@@ -227,6 +243,10 @@ export class Task {
     transferTask(element) {
 
         this.div = element.div
+    }
+    
+    setUserId (userId){
+        this.userId = userId;
     }
 
     //TODO

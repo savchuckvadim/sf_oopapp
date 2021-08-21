@@ -6,6 +6,8 @@ import {
     statusNames
 } from "../models/tasksBlocks"
 
+import { getFromStorage } from "../utils.js";
+
 import {changeState,  startApp } from "../app.js"
 import userPage from "../templates/taskField.html"
 let readyTasks;
@@ -15,8 +17,8 @@ let finishedTasks;
 import app from "../app"
 export var tasksBlocks = [];
 
-let draggedItem = null;
-let droppedItem = null;
+export let draggedItem = null;
+export let droppedItem = null;
 
 export function renderUserPage() { //отрисовывает div для userPage контента
     // let userPage = document.createElement('div');
@@ -31,10 +33,10 @@ export function renderUserPage() { //отрисовывает div для userPag
 
 function kanbanOut() {
     localStorage.removeItem('currentUser');
-    app();
+    startApp();
 }
 
-export function createTasksBlocks(appState) {
+export function createTasksBlocks(appState) { ///////////////////?///////////
 
 
 
@@ -42,8 +44,8 @@ export function createTasksBlocks(appState) {
         // console.log();
         tasksBlocks[i] = new Tasks(statusNames[i], i);
         tasksBlocks[i].renderTasks();
-        tasksBlocks[i].setUsersId (appState)
-        console.log(tasksBlocks[i])
+        
+        // console.log(tasksBlocks[i])
 
     }
     readyTasks = tasksBlocks[0];
@@ -267,16 +269,53 @@ export function createAndDeleteTask(oldTask, block, otherBlockIndex) { //(объ
 //при создании и редактировании задачи для записи в localStorage  программа берет id пользователя из blocka
 //находит по этому id пользователя в users и в него вносит изменения
 //блоки создаются...
-export const addTaskToStorage = function (obj, key, appState) {
+// export const addTaskToStorage = function (obj, key, appState) {
 
-    //получить id appState.currentUser
-    const storageData = getFromStorage(key);
-    storageData.push(obj);
-    localStorage.setItem(key, JSON.stringify(storageData));
-};
+//     //получить id appState.currentUser
+//     const storageData = getFromStorage(key);
+//     storageData.push(obj);
+//     localStorage.setItem(key, JSON.stringify(storageData));
+// };
 
 export {
     readyTasks,
     inProgressTasks,
     finishedTasks
 }
+
+export function addBlocksofTasksInLocalStorage (task) {
+    
+    //берем массив пользователей из localStorage
+    let allUsers = getFromStorage('users');
+    let foundUser = false
+    
+    allUsers.forEach((element) => {
+       
+        if(element.id == task.userId){
+            
+            foundUser = element           //находим нужного юзера
+        }
+    }) 
+
+    console.log(foundUser)
+     foundUser.tasks[task.number] = task;
+//foundUser - отдельная переменная надо ее вставить заместо element обратно?
+  
+    //  localStorage.setItem('users', JSON.stringify(allUsers))
+    console.log(allUsers)
+    console.log(foundUser)
+    // localStorage.removeItem('users')
+    // localStorage.setItem('users', JSON.stringify(allUsers))
+    return (allUsers)
+    // return foundUser
+}
+export function startTest () {
+    testAddToLocalStorage()
+}
+export function testAddToLocalStorage(){
+
+    localStorage.setItem('tasks', JSON.stringify('tasks'))
+}
+console.log()
+// localStorage.removeItem('users');
+// localStorage.setItem('users', JSON.stringify(allUsers))

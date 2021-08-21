@@ -4,7 +4,7 @@ import { names } from '../userPage/userLoader.js';
 import { Task } from './task.js';
 import { createTasksBlocks } from "../userPage/userLoader.js";
 
-import { createAndDeleteTask } from '../userPage/utilsForUsers.js';
+import { createAndDeleteTask, addBlocksofTasksInLocalStorage, searchUserById, testAddToLocalStorage, startTest } from '../userPage/utilsForUsers.js';
 
 import { handlerDragEnter } from '../userPage/utilsForUsers.js';
 import { handlerDragleave } from '../userPage/utilsForUsers.js';
@@ -43,11 +43,11 @@ export class Tasks {
 
         this.submitAddCard = document.createElement('input')
 
-        this.submit = document.createElement('input');
-        this.submit.type = 'submit';
-        // this.submit.style.display = 'none'
-        this.submit.className = 'task__add--button btn btn-primary';
-        this.submit.value = 'submit';
+        // this.submit = document.createElement('input');
+        // this.submit.type = 'submit';
+        // // this.submit.style.display = 'none'
+        // this.submit.className = 'task__add--button btn btn-primary';
+        // this.submit.value = 'submit';
 
         this.title.innerText = status;
 
@@ -148,13 +148,14 @@ export class Tasks {
 
 
 
-    createTask() {
+    createTask() {  // создает задачу
         let task = new Task(this.status, this.counter-1, this);
 
         this.tasks.push(task);
         this.counter = this.tasks.length;
         task.div.setAttribute('data-item', this.tasks.length-1)
 
+        task.setUserId(appState.currentUser.id);
         ///////////////////////////////////TEST///////////////////////////////////////////
 
         task.number = task.div.getAttribute('data-item') 
@@ -164,17 +165,22 @@ export class Tasks {
             this.addCardDisplay();
         })
 
+        
         return task
     }
 
     renderCreatedTask(createdTask) {
         this.tasks[this.tasks.length - 1].renderTask(this.tasksCardsDiv);
+        
+        
        
     }
     renderTransitionTask() {
         
         this.tasksCardsDiv.appendChild(this.tasks[this.tasks.length - 1].div)
+        
 
+        
 
     }
 
@@ -283,7 +289,7 @@ export class Tasks {
                             });
                             firstOption.remove()
                              readyTasks.actualityDataItem();
-                             console.log(tasksBlocks)
+                            //  console.log(tasksBlocks)
                             //  this.addCardDisplay()
                         }
                     })

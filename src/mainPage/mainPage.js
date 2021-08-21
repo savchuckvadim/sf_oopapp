@@ -8,7 +8,7 @@ import {
 import {
     changeState
 } from "../utils";
-import app from "../app"
+import {startApp} from "../app.js"
 
 
 
@@ -74,7 +74,7 @@ export function loadMainPage(app) {
         
         changeState(); //меняет состояние на текущий пользователь, если он существует
        
-        app();
+        startApp();
         //  state();       // включает логику приложения в зависимости от Состояния
         //adminUserBtn(appState.currentUser); 
 

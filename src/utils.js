@@ -81,7 +81,7 @@ export function changeState() { // изменяет состояние в зав
 export function out() {
   localStorage.removeItem('currentUser');
   changeState();
-  app();
+  startApp();
 }
 export function btnOut (parentElement){
   const btnOut = document.createElement('input');
