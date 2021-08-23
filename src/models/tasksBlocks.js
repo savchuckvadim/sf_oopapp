@@ -32,6 +32,7 @@ export class Tasks {
         this.usersId = ''
         this.counter = this.tasks.length;
 
+
         //this.taskAddBtn = document.createElement('#task__add--button');  // кнопка должна создавать new Task
 
         this.kanbanContent = document.querySelector('#kanban__content');
@@ -43,11 +44,11 @@ export class Tasks {
 
         this.submitAddCard = document.createElement('input')
 
-        // this.submit = document.createElement('input');
-        // this.submit.type = 'submit';
-        // // this.submit.style.display = 'none'
-        // this.submit.className = 'task__add--button btn btn-primary';
-        // this.submit.value = 'submit';
+        this.submit = document.createElement('input');
+        this.submit.type = 'submit';
+        // this.submit.style.display = 'none'
+        this.submit.className = 'task__add--button btn btn-primary';
+        this.submit.value = 'submit';
 
         this.title.innerText = status;
 
@@ -148,14 +149,17 @@ export class Tasks {
 
 
 
-    createTask() {  // создает задачу
-        let task = new Task(this.status, this.counter-1, this);
+    createTask(id) {  // создает задачу
+        let task = new Task(this.status, this.counter-1);
 
         this.tasks.push(task);
         this.counter = this.tasks.length;
         task.div.setAttribute('data-item', this.tasks.length-1)
 
         task.setUserId(appState.currentUser.id);
+        if(id){
+            task.id = id
+        }
         ///////////////////////////////////TEST///////////////////////////////////////////
 
         task.number = task.div.getAttribute('data-item') 
@@ -165,13 +169,14 @@ export class Tasks {
             this.addCardDisplay();
         })
 
-        testAddToLocalStorage(this.usersId) //записывает в localStorage
+        // testAddToLocalStorage(this.usersId) //записывает в localStorage
         return task
     }
 
-    renderCreatedTask(createdTask) {
+    renderCreatedTask() {  
+        
         this.tasks[this.tasks.length - 1].renderTask(this.tasksCardsDiv);
-        testAddToLocalStorage(this.usersId) //записывает в localStorage
+        // testAddToLocalStorage(this.usersId) //записывает в localStorage
 
         
        
@@ -179,8 +184,9 @@ export class Tasks {
     renderTransitionTask() {
         
         this.tasksCardsDiv.appendChild(this.tasks[this.tasks.length - 1].div)
-        testAddToLocalStorage(this.usersId) //записывает в localStorage
-
+        // testAddToLocalStorage(this.usersId) //записывает в localStorage
+        // this.tasks[this.tasks.length - 1].saveTask()
+        
 
         
 
@@ -209,7 +215,8 @@ export class Tasks {
             this.submitAddCard.addEventListener('click', () => {
                 this.addCardDisplay();
 
-                this.renderCreatedTask(this.createTask());
+                this.createTask()
+                this.renderCreatedTask();
             })
 
         }
@@ -271,7 +278,7 @@ export class Tasks {
                             
                    
 
-                            this.createTask();
+                            this.createTask(el.id);
                             this.renderTransitionTask();
 
 

@@ -1,29 +1,22 @@
 
-import { Tasks } from "./tasksBlocks.js";
-
-import { createTasksBlocks } from "../userPage/userLoader.js"
-import { createTask, 
-    tasksBlocks,  
-    addBlocksofTasksInLocalStorage, 
-    testAddToLocalStorage, 
-    searchBlock  } from '../userPage/utilsForUsers.js';
+import { tasksBlocks } from '../userPage/utilsForUsers.js';
 
 
 import { handlerDragStart } from '../userPage/utilsForUsers.js';
 import { handlerDragEnd } from '../userPage/utilsForUsers.js';
 import { handlerDrag } from '../userPage/utilsForUsers.js';
 import { addCard, allInputInP, draggedItem, droppedItem } from "../userPage/utilsForUsers.js";
+import { addToStorage, getFromStorage } from "../utils.js";
+import { BaseModel } from "./BaseModel.js";
 
-export class Task {
+export class Task extends BaseModel {
 
-    constructor(status, number, block) {
+    constructor(status, number) {
 
+        super();
         this.number = number;
-        // this.value = value;
         this.status = status;
-        // this.block = block;
         this.value = '';
-
         this.userId = ''
         
 
@@ -44,13 +37,9 @@ export class Task {
         this.submit.className = 'task__add--button btn btn-primary';
         this.submit.value = 'submit';
 
-
-        // submit Delete
-
-        // this.submitDelete.type = 'submit';
         this.submitDelete.style.display = 'none'
         this.submitDelete.className = 'task__add--button btn btn-danger';
-        // this.submitDelete.value = 'удалить';
+        
         this.submitDelete.innerText = 'удалить';
 
         //////////////////////////////////////////TODO delete
@@ -78,6 +67,7 @@ export class Task {
                 droppedItem = this.div;
             }
 
+            console.log('dragEnter')
         })
         this.div.addEventListener('dragleave', () => {
 
@@ -87,21 +77,16 @@ export class Task {
     }
 
 
-    ////////////////ВОТ ОНО
+    
     //TODO в этой функции сделать условие - отрисовывается новая задача или перетаскиваемая
     renderTask(element) { //element - родительский элемент HTML из блока, в который будет всё вставляться
-        // this.flag = false;
-        
-
-
+       
         element.appendChild(this.div);
         this.div.appendChild(this.form);
         this.form.appendChild(this.input);
         this.form.appendChild(this.divSubmits);
         this.divSubmits.appendChild(this.submit);
         this.divSubmits.appendChild(this.submitDelete);
-
-        // this.input.replaceWith(this.p);
 
 
         this.input.addEventListener('focusin', () => {
@@ -119,34 +104,17 @@ export class Task {
                 this.submitDelete.style.display = 'none';
                 this.submit.style.display = 'none'
                 addCard(this.status);
-
-                
-                 
-
-                 
+    
             })
-
-            
-            // this.submitDelete.addEventListener('click', (e) => {
-            //     e.preventDefault();
-            //     this.deleteTask(this.block)
-            // })
 
         })
 
+        
         this.input.addEventListener('drag', (event) => {
 
         }, false)
 
-        // this.input.addEventListener('focusout', () => { //  при убирании фокуса с инпута срабатывает та же логика что при нажатии кнопки отправить
-            
-        //     this.taskValue(this.input.value);
-        //     this.input.replaceWith(this.p);
-        //     this.divSubmits.style.display = 'none';
-        //     this.submitDelete.style.display = 'none';
-        //     this.submit.style.display = 'none'
-        //     addCard(this.status);
-        // })
+        
 
         this.submitDelete.addEventListener('click', (e) => {
             e.preventDefault()
@@ -179,26 +147,13 @@ export class Task {
                 this.submitDelete.style.display = 'none';
                 this.submit.style.display = 'none'
                
-                window.alert('this.submit')
-                
-                // addBlocksofTasksInLocalStorage(this.block);
             })
 
 
             
         })
 
-        // this.input.addEventListener('change', () => {
-        //     this.taskValue(this.input.value);
-        //     this.input.replaceWith(this.p);
-        //     this.submit.style.display = 'none'
-        // })
-
-       
-
-        // console.log(this.block)
-        // console.log(tasksBlocks)
-        // console.log(this.userId)
+        
 
         
         
@@ -211,7 +166,7 @@ export class Task {
         this.p.innerText = value;
         this.input.value = value;
         this.value = value;
-        testAddToLocalStorage(this.userId) //записывает в localStorage
+        this.saveTask()
 
     }
 
@@ -241,9 +196,8 @@ export class Task {
             element.number = index
             
         })
-        // this.block.tasksCardsDiv.removeChild(this.div)
-        // к этой кнопке будет обращаться кнопка удаления
-         testAddToLocalStorage(this.userId) //записывает в localStorage
+  
+         this.saveTask()
     }
 
 
@@ -267,6 +221,58 @@ export class Task {
             }
         })
         return block
+    }
+
+
+    saveTask(){
+        let task = {
+            'id' : this.id,
+            'number' : this.number,
+            'status' : this.status,
+            'value' : this.value,
+            'userId' : this.userId,
+        }
+
+        let allTasksFromLocalStorage = getFromStorage('tasks');
+        let allId = [];
+        function searchID (element){
+            return element == task.id
+        }
+        if (allTasksFromLocalStorage.length > 0){
+
+            
+
+            for (let i = 0; i < allTasksFromLocalStorage.length; i++){
+
+               allId[i] = allTasksFromLocalStorage[i].id;
+               console.log(allTasksFromLocalStorage)
+               console.log(allId)
+            }
+            if (allId.some(searchID)){
+                for (let j = 0; j < allTasksFromLocalStorage.length; j++){
+                    if (allTasksFromLocalStorage[j].id == this.id){
+                        allTasksFromLocalStorage.splice(j, 1, task)
+                        
+                        // allTasksFromLocalStorage[i] = task;
+                    }                  
+                    
+                }
+                
+            }else{
+                allTasksFromLocalStorage[allTasksFromLocalStorage.length] = task;
+            }
+            // 
+
+
+        }else{
+            allTasksFromLocalStorage[0] = task;
+        }
+        localStorage.removeItem('tasks');
+        allTasksFromLocalStorage.forEach((element) => {
+            addToStorage(element, 'tasks')
+        })
+        console.log(this.id)
+        
     }
     //TODO
     // 1.создание формы задачи: input и submit

@@ -33,7 +33,7 @@ import { renderUserPage } from "./utilsForUsers.js";
 
 
 
-import { createTasksBlocks } from "./utilsForUsers.js";
+import { createTasksBlocks} from "./utilsForUsers.js";
 // import {tasksBlocks} from "../models/tasksBlocks.js"
 
 
@@ -59,6 +59,7 @@ export function userLoader(){
  
     renderUserPage()
     createTasksBlocks(appState);
+    
     const btnOut = document.getElementById('admin__btn');
     // btnOut.addEventListener('click', () => {
     //     out()

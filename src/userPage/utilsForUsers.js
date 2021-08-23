@@ -6,9 +6,9 @@ import {
     statusNames
 } from "../models/tasksBlocks"
 
-import { getFromStorage } from "../utils.js";
+import { getFromStorage, changeState } from "../utils.js";
 
-import {changeState,  startApp } from "../app.js"
+import {startApp } from "../app.js"
 import userPage from "../templates/taskField.html"
 let readyTasks;
 let inProgressTasks;
@@ -36,7 +36,8 @@ function kanbanOut() {
     startApp();
 }
 
-export function createTasksBlocks(appState) { ///////////////////?///////////
+export function createTasksBlocks(appState) { /////////////создаёт блоки задач и отрисовывает их  в зависимости от statusNames
+                                               //////////// возвращает массив блоков, которые потом записываются в пользователей
 
 
 
@@ -52,9 +53,48 @@ export function createTasksBlocks(appState) { ///////////////////?///////////
     inProgressTasks = tasksBlocks[1];
     finishedTasks = tasksBlocks[2];
 
+   
+     renderRelevantTasks(appState, tasksBlocks)
+    console.log(tasksBlocks)
     return tasksBlocks
 }
-// console.log(createTasksBlocks())
+
+function renderRelevantTasks(appState){
+
+    
+    let allRelevantTasks = getFromStorage('tasks');
+    let allRelevantTasksOfCurrentUser = []
+    // собрать массив задач из localStorage
+    // найти принадлежащие текущему пользователю 
+
+    allRelevantTasks.forEach((element) => {
+        if(element.userId == appState.currentUser.id){
+            allRelevantTasksOfCurrentUser[allRelevantTasksOfCurrentUser.length] = element;
+        }
+    })
+    console.log(allRelevantTasksOfCurrentUser)
+    // найти по очереди принадлежащие разным блокам по статусу
+    for (let i = 0; i < allRelevantTasksOfCurrentUser.length; i++){
+        if(allRelevantTasksOfCurrentUser[i].status == tasksBlocks[0].status){
+            createAndDeleteTask(allRelevantTasksOfCurrentUser[i], 0)
+           
+        
+        }else if(allRelevantTasksOfCurrentUser[i].status == tasksBlocks[1].status){
+            createAndDeleteTask(allRelevantTasksOfCurrentUser[i], 1)
+        
+        }else if(allRelevantTasksOfCurrentUser[i].status == tasksBlocks[2].status){
+            createAndDeleteTask(allRelevantTasksOfCurrentUser[i], 2)
+        
+        }
+    
+
+    }
+        
+    // на каждое совпадение создать новый объект задачи
+    // поместить во вновь созданные данные из объектов из locqalStorage
+
+}
+
 
 
 
@@ -115,6 +155,7 @@ const dropZones = document.querySelectorAll('.dropZone');
 
 export function handlerDragStart(event) {
 
+    console.log('dragstart')
     // event.dataTransfer.setData('dragItem', this.dataset.item)
     this.classList.add('dragItem--active')
     draggedItem = this;
@@ -210,7 +251,7 @@ export function transferTasks(tasksBlock, otherBlockIndex1, otherBlockIndex2) {
 
             if (element.div.parentElement.getAttribute('data-zone') == otherBlockIndex1) { //если значение атрибута родителя 1
 
-                createAndDeleteTask(element, tasksBlock, otherBlockIndex1);
+                createAndDeleteTask(element, otherBlockIndex1);
 
 
 
@@ -218,7 +259,7 @@ export function transferTasks(tasksBlock, otherBlockIndex1, otherBlockIndex2) {
             } else if ((element.div.parentElement.getAttribute('data-zone') == otherBlockIndex2)) {
 
 
-                createAndDeleteTask(element, tasksBlock, otherBlockIndex2);
+                createAndDeleteTask(element, otherBlockIndex2);
 
             }
 
@@ -236,12 +277,13 @@ export function transferTasks(tasksBlock, otherBlockIndex1, otherBlockIndex2) {
 }
 
 
-export function createAndDeleteTask(oldTask, block, otherBlockIndex) { //(объект переносимой задачи из Ready, Ready, другой блок в который переносится)
+export function createAndDeleteTask(oldTask, otherBlockIndex) { //(объект переносимой задачи из Ready, Ready, другой блок в который переносится)
     //TODO создать новую задачу в inProgress
     //было   tasksBlocks[1].renderCreatedTask(tasksBlocks[1].createTask());
     let otherBlock1 = tasksBlocks[otherBlockIndex]
     // let thisTask = otherBlock1.tasks[otherBlock1.tasks.length - 1];
-    otherBlock1.createTask()
+    
+    otherBlock1.createTask(oldTask.id)
     otherBlock1.renderTransitionTask();
     //TODO: 
     // otherBlock1.tasks[otherBlock1.tasks.length - 1].transferTask(element)
@@ -252,6 +294,9 @@ export function createAndDeleteTask(oldTask, block, otherBlockIndex) { //(объ
 
     otherBlock1.tasks[otherBlock1.tasks.length - 1].taskValue(oldTask.value)
 
+    
+    otherBlock1.tasks[otherBlock1.tasks.length - 1].setUserId(oldTask.userId)
+    // otherBlock1.tasks[otherBlock1.tasks.length - 1].number = oldTask.number
     otherBlock1.tasks[otherBlock1.tasks.length - 1].renderTask(otherBlock1.tasksCardsDiv)
     let event = new Event("click");
     otherBlock1.tasks[otherBlock1.tasks.length - 1].p.dispatchEvent(event);
@@ -262,8 +307,8 @@ export function createAndDeleteTask(oldTask, block, otherBlockIndex) { //(объ
 
     // //удалить задачу из Ready, найдя ее в массиве задач Ready по data-item
     // console.log(tasksBlock.tasks[item - 1].div)
-    oldTask.deleteTask(block);
-
+    if(oldTask.div) oldTask.deleteTask();
+    otherBlock1.tasks[otherBlock1.tasks.length - 1].saveTask()
 }
 
 //создаётся задача из блока
@@ -288,14 +333,25 @@ export {
 export function addBlocksofTasksInLocalStorage (userId) {
     
     //берем массив пользователей из localStorage
-    let allUsers = getFromStorage('users');
+    let allUsers = getFromStorage('users');    //находит в localStorage всех пользователей, в переменную
+    let currentUser = getFromStorage('currentUser'); //находит в localStorage текущего пользователя, в переменную
     let foundUser = false
     
-    for(let i = 0; i < allUsers.length; i++){
-        if(allUsers[i].id == userId){
-            allUsers[i].tasks = tasksBlocks
+    for(let i = 0; i < allUsers.length; i++){  //перебирает всех пользователей
+        if(allUsers[i].id == userId){          //находит нужного по id
+            allUsers[i].tasks = tasksBlocks  //берет его блоки задач
+
         }
     }
+
+    // tasksBlocks.forEach((element) => {
+    //     element.tasks.forEach((el) => {
+    //         el.renderTask(element.div)
+    //     })
+    // })
+    
+    currentUser[0].tasks = tasksBlocks;     //записывает юлоки в текущего пользователя
+    localStorage.setItem('currentUser', JSON.stringify(currentUser))
     
 
     return (allUsers)
@@ -307,6 +363,7 @@ export function testAddToLocalStorage(userId){
 
     let newTasksBlocks = addBlocksofTasksInLocalStorage(userId)
     localStorage.setItem('users', JSON.stringify(newTasksBlocks))
+    changeState()
 }
 console.log()
 // localStorage.removeItem('users');
