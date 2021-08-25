@@ -55,7 +55,7 @@ export function createTasksBlocks(appState) { /////////////создаёт бло
 
    
      renderRelevantTasks(appState, tasksBlocks)
-    console.log(tasksBlocks)
+    
     return tasksBlocks
 }
 
@@ -69,21 +69,21 @@ function renderRelevantTasks(appState){
 
     allRelevantTasks.forEach((element) => {
         if(element.userId == appState.currentUser.id){
-            allRelevantTasksOfCurrentUser[allRelevantTasksOfCurrentUser.length] = element;
+            allRelevantTasksOfCurrentUser.push(element);
         }
     })
-    console.log(allRelevantTasksOfCurrentUser)
+    
     // найти по очереди принадлежащие разным блокам по статусу
     for (let i = 0; i < allRelevantTasksOfCurrentUser.length; i++){
         if(allRelevantTasksOfCurrentUser[i].status == tasksBlocks[0].status){
-            createAndDeleteTask(allRelevantTasksOfCurrentUser[i], 0)
+            createAndDeleteTask(allRelevantTasksOfCurrentUser[i], tasksBlocks[0])
            
         
         }else if(allRelevantTasksOfCurrentUser[i].status == tasksBlocks[1].status){
-            createAndDeleteTask(allRelevantTasksOfCurrentUser[i], 1)
+            createAndDeleteTask(allRelevantTasksOfCurrentUser[i], tasksBlocks[1])
         
         }else if(allRelevantTasksOfCurrentUser[i].status == tasksBlocks[2].status){
-            createAndDeleteTask(allRelevantTasksOfCurrentUser[i], 2)
+            createAndDeleteTask(allRelevantTasksOfCurrentUser[i], tasksBlocks[2])
         
         }
     
@@ -230,85 +230,65 @@ export function handlerDrop(event) {
         this.append(draggedItem)
         
         console.log('разные родительские элементы')
-        transferTasks(tasksBlocks[0], 1, 2);
-        transferTasks(tasksBlocks[1], 0, 2);
-        transferTasks(tasksBlocks[2], 0, 1);
+        transferTasks(tasksBlocks[0], tasksBlocks[1], tasksBlocks[2]);
+        transferTasks(tasksBlocks[1], tasksBlocks[0], tasksBlocks[2]);
+        transferTasks(tasksBlocks[2], tasksBlocks[0], tasksBlocks[1]);
 
 
     }
-
+    
 
 }
 
 
-export function transferTasks(tasksBlock, otherBlockIndex1, otherBlockIndex2) {
+export function transferTasks(tasksBlock, otherBlock1, otherBlock2) {
 
     if (tasksBlock.tasks != null) {
         tasksBlock.tasks.forEach((element) => { //перебирает объединенный массив задач из текущего блока задач taskBlock element - объект задачи
 
+            if (element.div.parentElement.getAttribute('data-zone') == otherBlock1) { //если значение атрибута родителя 1
 
-            // let item = element.div.getAttribute('data-item');
+                createAndDeleteTask(element, otherBlock1);
 
-            if (element.div.parentElement.getAttribute('data-zone') == otherBlockIndex1) { //если значение атрибута родителя 1
+            } else if ((element.div.parentElement.getAttribute('data-zone') == otherBlock2)) {
 
-                createAndDeleteTask(element, otherBlockIndex1);
-
-
-
-
-            } else if ((element.div.parentElement.getAttribute('data-zone') == otherBlockIndex2)) {
-
-
-                createAndDeleteTask(element, otherBlockIndex2);
+                createAndDeleteTask(element, otherBlock2);
 
             }
 
-            // console.log(element.div.parentElement.getAttribute('data-zone'))
         })
     }
-
-    // tasksBlock.actualityDataItem();
-    // tasksBlocks[otherBlockIndex1].actualityDataItem();
-    // tasksBlocks[otherBlockIndex2].actualityDataItem();
-
-
-    console.log(tasksBlocks);
 
 }
 
 
-export function createAndDeleteTask(oldTask, otherBlockIndex) { //(объект переносимой задачи из Ready, Ready, другой блок в который переносится)
+export function createAndDeleteTask(oldTask, otherBlock) { //(объект переносимой задачи из Ready, Ready, другой блок в который переносится)
     //TODO создать новую задачу в inProgress
-    //было   tasksBlocks[1].renderCreatedTask(tasksBlocks[1].createTask());
-    let otherBlock1 = tasksBlocks[otherBlockIndex]
-    // let thisTask = otherBlock1.tasks[otherBlock1.tasks.length - 1];
     
-    otherBlock1.createTask(oldTask.id)
-    otherBlock1.renderTransitionTask();
-    //TODO: 
-    // otherBlock1.tasks[otherBlock1.tasks.length - 1].transferTask(element)
-
-
-    //загрузить туда value 
-
-
-    otherBlock1.tasks[otherBlock1.tasks.length - 1].taskValue(oldTask.value)
-
+    otherBlock.createTask(oldTask.id)
+    let thisTask = otherBlock.tasks[otherBlock.tasks.length - 1];
     
-    otherBlock1.tasks[otherBlock1.tasks.length - 1].setUserId(oldTask.userId)
-    // otherBlock1.tasks[otherBlock1.tasks.length - 1].number = oldTask.number
-    otherBlock1.tasks[otherBlock1.tasks.length - 1].renderTask(otherBlock1.tasksCardsDiv)
+    otherBlock.renderTransitionTask();
+    thisTask.taskValue(oldTask.value)
+    thisTask.setUserId(oldTask.userId)
+    thisTask.number = otherBlock.tasks.length - 1
+    thisTask.status = otherBlock.status
+
+    thisTask.renderTask(otherBlock.tasksCardsDiv)
+
     let event = new Event("click");
-    otherBlock1.tasks[otherBlock1.tasks.length - 1].p.dispatchEvent(event);
-    otherBlock1.tasks[otherBlock1.tasks.length - 1].submit.dispatchEvent(event);
-    otherBlock1.addCardDisplay();
-    // console.log(tasksBlocks[otherBlockIndex1].tasksCardsDiv.childNodes)
-    //   tasksBlocks[otherBlockIndex1].tasksCardsDiv.removeChild(tasksBlocks[otherBlockIndex1].tasksCardsDiv.childNodes[0]); //удаляет старый html
+    thisTask.p.dispatchEvent(event);
+    thisTask.submit.dispatchEvent(event);
 
-    // //удалить задачу из Ready, найдя ее в массиве задач Ready по data-item
-    // console.log(tasksBlock.tasks[item - 1].div)
+    otherBlock.addCardDisplay();
+
     if(oldTask.div) oldTask.deleteTask();
-    otherBlock1.tasks[otherBlock1.tasks.length - 1].saveTask()
+
+   
+    thisTask.saveTask()
+    tasksBlocks.forEach((element) => {
+        element.actualityDataItem()
+    })
 }
 
 //создаётся задача из блока
@@ -330,42 +310,44 @@ export {
     finishedTasks
 }
 
-export function addBlocksofTasksInLocalStorage (userId) {
+// export function addBlocksofTasksInLocalStorage (userId) {
     
-    //берем массив пользователей из localStorage
-    let allUsers = getFromStorage('users');    //находит в localStorage всех пользователей, в переменную
-    let currentUser = getFromStorage('currentUser'); //находит в localStorage текущего пользователя, в переменную
-    let foundUser = false
+//     //берем массив пользователей из localStorage
+//     let allUsers = getFromStorage('users');    //находит в localStorage всех пользователей, в переменную
+//     let currentUser = getFromStorage('currentUser'); //находит в localStorage текущего пользователя, в переменную
+//     let foundUser = false
     
-    for(let i = 0; i < allUsers.length; i++){  //перебирает всех пользователей
-        if(allUsers[i].id == userId){          //находит нужного по id
-            allUsers[i].tasks = tasksBlocks  //берет его блоки задач
+//     for(let i = 0; i < allUsers.length; i++){  //перебирает всех пользователей
+//         console.log('allUsers')
+//         console.log(allUsers)
+//         if(allUsers[i].id == userId){          //находит нужного по id
+//             allUsers[i].tasks = tasksBlocks  //берет его блоки задач
 
-        }
-    }
+//         }
+//     }
 
-    // tasksBlocks.forEach((element) => {
-    //     element.tasks.forEach((el) => {
-    //         el.renderTask(element.div)
-    //     })
-    // })
+//     // tasksBlocks.forEach((element) => {
+//     //     element.tasks.forEach((el) => {
+//     //         el.renderTask(element.div)
+//     //     })
+//     // })
     
-    currentUser[0].tasks = tasksBlocks;     //записывает юлоки в текущего пользователя
-    localStorage.setItem('currentUser', JSON.stringify(currentUser))
+//     currentUser[0].tasks = tasksBlocks;     //записывает юлоки в текущего пользователя
+//     localStorage.setItem('currentUser', JSON.stringify(currentUser))
     
 
-    return (allUsers)
-    // return foundUser
-}
+//     return (allUsers)
+//     // return foundUser
+// }
 
 
-export function testAddToLocalStorage(userId){
+// export function testAddToLocalStorage(userId){
 
-    let newTasksBlocks = addBlocksofTasksInLocalStorage(userId)
-    localStorage.setItem('users', JSON.stringify(newTasksBlocks))
-    changeState()
-}
-console.log()
+//     let newTasksBlocks = addBlocksofTasksInLocalStorage(userId)
+//     localStorage.setItem('users', JSON.stringify(newTasksBlocks))
+//     changeState()
+// }
+// console.log()
 // localStorage.removeItem('users');
 // localStorage.setItem('users', JSON.stringify(allUsers))
 
@@ -383,4 +365,43 @@ console.log()
 // console.log(test)
 // export function searchTask (searchBlock, taskStatus){
 //     console.log(searchBlock(taskStatus).tasks)
+// }
+
+// export function searchSelectedOption(allOptions, draggingFromBlockTasks){
+
+//     console.log('allOptions[i]')
+//     for (let i = 0; i < allOptions.length; i++) {
+        
+//         console.log(allOptions[i].value)
+//     }
+//     console.log('draggingFromBlockTasks[j]')
+//     for (let j = 0; j < draggingFromBlockTasks.length; j++) {
+        
+//         console.log(draggingFromBlockTasks[j].id)
+//     }
+//     let foundTask 
+//     for (let i = 0; i < allOptions.length; i++) {
+//         if (allOptions[i].selected == true) { //находит отмеченный
+//             console.log(allOptions[i])
+//             console.log(draggingFromBlockTasks)
+//             for (let j = 0; j < draggingFromBlockTasks.length; j++) { 
+                
+
+//                 if (draggingFromBlockTasks[j].number == allOptions[i].value) {
+//                     // let index = allOptions[i].value
+
+//                     foundTask = draggingFromBlockTasks[j]
+//                     console.log('foundTask')
+//                     console.log(foundTask)
+                    
+                    
+
+//                 }
+//             }
+
+//         }
+
+//     }
+//     return foundTask 
+  
 // }

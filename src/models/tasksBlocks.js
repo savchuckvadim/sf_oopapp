@@ -1,21 +1,43 @@
-
 // import Task from './task.js'
-import { names } from '../userPage/userLoader.js';
-import { Task } from './task.js';
-import { createTasksBlocks } from "../userPage/userLoader.js";
+import {
+    names
+} from '../userPage/userLoader.js';
+import {
+    Task
+} from './task.js';
 
-import { createAndDeleteTask, addBlocksofTasksInLocalStorage, searchUserById, testAddToLocalStorage, startTest } from '../userPage/utilsForUsers.js';
 
-import { handlerDragEnter } from '../userPage/utilsForUsers.js';
-import { handlerDragleave } from '../userPage/utilsForUsers.js';
-import { handlerDragover } from '../userPage/utilsForUsers.js';
-import { handlerDrop } from '../userPage/utilsForUsers.js';
+import {
+    createAndDeleteTask,
+    createTasksBlocks
+} from '../userPage/utilsForUsers.js';
+
+import {
+    handlerDragEnter
+} from '../userPage/utilsForUsers.js';
+import {
+    handlerDragleave
+} from '../userPage/utilsForUsers.js';
+import {
+    handlerDragover
+} from '../userPage/utilsForUsers.js';
+import {
+    handlerDrop
+} from '../userPage/utilsForUsers.js';
 import index from "../index.html"
 
-import { readyTasks } from '../userPage/utilsForUsers.js';
-import { tasksBlocks } from '../userPage/utilsForUsers.js';
-import { getFromStorage } from '../utils.js';
-import { appState } from '../app.js';
+import {
+    readyTasks
+} from '../userPage/utilsForUsers.js';
+import {
+    tasksBlocks
+} from '../userPage/utilsForUsers.js';
+import {
+    getFromStorage
+} from '../utils.js';
+import {
+    appState, startApp
+} from '../app.js';
 
 
 export const statusNames = ['Ready', 'InProgress', 'Finished'];
@@ -31,6 +53,7 @@ export class Tasks {
         this.tasks = [];
         this.usersId = ''
         this.counter = this.tasks.length;
+        this.dropDownFlag = false
 
 
         //this.taskAddBtn = document.createElement('#task__add--button');  // кнопка должна создавать new Task
@@ -149,20 +172,20 @@ export class Tasks {
 
 
 
-    createTask(id) {  // создает задачу
-        let task = new Task(this.status, this.counter-1);
+    createTask(id) { // создает задачу
+        let task = new Task(this.status, this.counter - 1);
 
         this.tasks.push(task);
         this.counter = this.tasks.length;
-        task.div.setAttribute('data-item', this.tasks.length-1)
+        task.div.setAttribute('data-item', this.tasks.length - 1)
 
         task.setUserId(appState.currentUser.id);
-        if(id){
+        if (id) {
             task.id = id
         }
         ///////////////////////////////////TEST///////////////////////////////////////////
 
-        task.number = task.div.getAttribute('data-item') 
+        task.number = task.div.getAttribute('data-item')
         //////////////////////////////////////////////////////////////////
 
         task.p.addEventListener('click', () => { ///дизэйбл AddCard
@@ -173,22 +196,22 @@ export class Tasks {
         return task
     }
 
-    renderCreatedTask() {  
-        
+    renderCreatedTask() {
+
         this.tasks[this.tasks.length - 1].renderTask(this.tasksCardsDiv);
         // testAddToLocalStorage(this.usersId) //записывает в localStorage
 
-        
-       
+
+
     }
     renderTransitionTask() {
-        
+
         this.tasksCardsDiv.appendChild(this.tasks[this.tasks.length - 1].div)
         // testAddToLocalStorage(this.usersId) //записывает в localStorage
         // this.tasks[this.tasks.length - 1].saveTask()
-        
 
-        
+
+
 
     }
 
@@ -198,23 +221,14 @@ export class Tasks {
         if (this.status != 'Ready') {
 
             this.submitAddCard.addEventListener('click', () => {
-                window.alert(this.status)
-                // this.submitAddCard.innerHTML = this.dropDown.innerHTML;
-
 
                 this.submitAddCard.parentNode.replaceChild(this.dropDown, this.submitAddCard)
                 this.dropDownContent();
-
-
-
-
-                ///////////////////////////////////////////////////////////////////////
             })
 
         } else {
             this.submitAddCard.addEventListener('click', () => {
                 this.addCardDisplay();
-
                 this.createTask()
                 this.renderCreatedTask();
             })
@@ -223,18 +237,20 @@ export class Tasks {
     }
 
     dropDownContent() {
-        this.dropDown.style.display = 'inline-block';  //включает видимость выпадающего списка
+        const draggingFromBlock = tasksBlocks[this.dataZoneNumber - 1]; //блок, из которого будем перемещать задачи
+        console.log(draggingFromBlock)
+        this.dropDown.style.display = 'inline-block'; //включает видимость выпадающего списка
         let firstOption = document.createElement('option'); //создаёт элемент option
         firstOption.setAttribute('selected', 'true') //обозначает его как выбранный
         // firstOption.className = 'option'
-        firstOption.innerText = 'выберите задачу';  //задаёт его значение 'выберите задачу'
-        this.dropDown.appendChild(firstOption)  //вставляет его в выпадающий список
+        firstOption.innerText = 'выберите задачу'; //задаёт его значение 'выберите задачу'
+        this.dropDown.appendChild(firstOption) //вставляет его в выпадающий список
 
 
-        readyTasks.tasks.forEach((element) => {    //перебирает все задачи из блока readyTasks
-            let option = document.createElement('option');  // создаём переменную, в неё засовываем вновь созданный элемент option
+        draggingFromBlock.tasks.forEach((element) => { //перебирает все задачи из блока c dataZoneNumber меньшим на один, чем предыдущий
+            let option = document.createElement('option'); // создаём переменную, в неё засовываем вновь созданный элемент option
             option.className = 'option' //задаем класс для option
-            option.value = element.div.getAttribute('data-item') ;  //
+            option.value = element.div.getAttribute('data-item'); //
             option.innerText = element.value;
             this.dropDown.appendChild(option) // вставляем каждый элемент в выпадающий список
 
@@ -243,79 +259,84 @@ export class Tasks {
         let allOptions = document.querySelectorAll('.option'); //все созданные элементы
 
 
+
         //////////////////////////////////////////////////////////////////////////////////
 
-        this.dropDown.addEventListener('change', () => {
+        this.dropDown.addEventListener('change', (e) => {
 
-            allOptions.forEach((element) => {  //перебирает все .option
-                if (element.selected == true) { //находит отмеченный
-                    console.log(element)
-                    
-                    //удалить найденную задачу из ReadyTask и вставить в текущий статус
+            if (!this.dropDownFlag) {
+                window.alert('change')
+                this.dropDownFlag = true
+                // allOptions.forEach((element) => {  //перебирает все .option
+                //    let foundTask = (allOptions, draggingFromBlockTasks) => {
 
-                    //  this.createTask();
-                    // this.renderTransitionTask();
-                    // this.tasks[this.tasks.length - 1].taskValue(readyTasks.tasks[index]);
-                    // this.tasks[this.tasks.length - 1].renderTask(this.tasksCardsDiv)
-
-                    // let event = new Event("click");
-                    // this.tasks[this.tasks.length - 1].p.dispatchEvent(event);
-                    // this.tasks[this.tasks.length - 1].submit.dispatchEvent(event)
-                    // this.addCardDisplay();
-                    //  readyTasks.tasks[index].deleteTask(readyTasks)
-                    //здесь надо запустить функцию transferTask - в нее передаем текущий блок задач из которого переносим и те в которые переносим
-
-                    // transferTasks(readyTasks, 1, 2)
-
-                    readyTasks.tasks.forEach((el) => {
-                        if( el.div.getAttribute('data-item') == element.value){
-                            window.alert(element.value)
-                            // transferTasks(tasksBlocks[0], 1, 2);
-                            // createAndDeleteTask(el, this, this.tasksCardsDiv.getAttribute('data-zone'))
-
-                            let index = element.value
-                            
-                            
-                   
-
-                            this.createTask(el.id);
-                            this.renderTransitionTask();
-
-
-                    this.tasks[this.tasks.length - 1].taskValue(readyTasks.tasks[index].value);
-                    this.tasks[this.tasks.length - 1].renderTask(this.tasksCardsDiv)
-                    let event = new Event("click");
-                    this.tasks[this.tasks.length - 1].p.dispatchEvent(event);
-                    this.tasks[this.tasks.length - 1].submit.dispatchEvent(event)
-                    this.addCardDisplay();
-                     readyTasks.tasks[index].deleteTask(readyTasks)
-
-                            console.log(this)
-                            this.dropDown.style.display = 'none';
-                            this.dropDown.parentNode.replaceChild(this.submitAddCard, this.dropDown)
-                            allOptions.forEach(e => {
-                                e.remove()
-                            });
-                            firstOption.remove()
-                             readyTasks.actualityDataItem();
-                            //  console.log(tasksBlocks)
-                            //  this.addCardDisplay()
-                        }
-                    })
+                let foundTask
+                for (let i = 0; i < allOptions.length; i++) {
+                    console.log('allOptions[i')
+                    console.log(allOptions[i])
+                    console.log(draggingFromBlock.tasks[i])
+                    if (allOptions[i].selected) { //находит отмеченный
 
 
 
-                    // createAndDeleteTask()
-                    // let transferTask = this.createTask();
-                    // transferTask.taskValue(readyTasks[element.value]);
-                    // delete readyTasks[element.value];
-                    //////////////////////////////////////////////////////ToDo исправить delete - заменить на splice
+                        foundTask = draggingFromBlock.tasks[i]
+
+                        window.alert(foundTask.number)
+
+                    }
+
                 }
-            })
-        })
+                // return foundedTask
+                //    }
+                //    console.log('foundTask from dropdown')
+                //    console.log(foundTask)
+                /////////////////////////////////В некоторых случаях foundTask = undifined
+                // createAndDeleteTask(foundTask, this)
 
+                // this.createTask(foundTask.id)
+
+                // let thisTask = this.tasks[this.tasks.length - 1];
+                // this.renderTransitionTask();
+                // thisTask.taskValue(foundTask.value)
+                // thisTask.setUserId(foundTask.userId)
+
+                // thisTask.number = this.tasks.length - 1
+                // thisTask.status = this.status
+                // thisTask.renderTask(this.tasksCardsDiv)
+
+                // let event = new Event("click");
+                // thisTask.p.dispatchEvent(event);
+                // thisTask.submit.dispatchEvent(event);
+
+                // this.addCardDisplay();
+                // if(foundTask.div) {
+                //     foundTask.deleteTask();
+                // }
+
+                // draggingFromBlock.tasks.splice(foundTask.number, 1)
+                // thisTask.saveTask()
+
+                createAndDeleteTask(foundTask, this)
+                this.dropDown.style.display = 'none';
+                this.dropDown.parentNode.replaceChild(this.submitAddCard, this.dropDown)
+
+
+                allOptions.forEach(e => {
+
+                    e.selected = false
+                    e.remove()
+                });
+                firstOption.remove()
+                
+            }
+startApp()
+
+        })
+        this.dropDownFlag = false
+        
 
     }
+
 
 
 
@@ -333,18 +354,18 @@ export class Tasks {
     }
 
 
-    actualityDataItem () {
+    actualityDataItem() {
         this.tasks.forEach((element, index) => {
             element.div.setAttribute('data-item', index)
-           
+            element.number = index
 
 
         })
     }
 
 
-    setUsersId (appState) {
-        if (!this.usersId){
+    setUsersId(appState) {
+        if (!this.usersId) {
             this.usersId = appState.currentUser.id;
         }
     }

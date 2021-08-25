@@ -186,7 +186,7 @@ export class Task extends BaseModel {
         this.submitDelete.remove()
         
         
-        block.tasks.splice(this.number, 1)  //проблема в number
+        block.tasks.splice(this.number, 1)  
         block.counter--;
         
         
@@ -245,8 +245,7 @@ export class Task extends BaseModel {
             for (let i = 0; i < allTasksFromLocalStorage.length; i++){
 
                allId[i] = allTasksFromLocalStorage[i].id;
-               console.log(allTasksFromLocalStorage)
-               console.log(allId)
+               
             }
             if (allId.some(searchID)){
                 for (let j = 0; j < allTasksFromLocalStorage.length; j++){
@@ -271,7 +270,7 @@ export class Task extends BaseModel {
         allTasksFromLocalStorage.forEach((element) => {
             addToStorage(element, 'tasks')
         })
-        console.log(this.id)
+        
         
     }
     //TODO
