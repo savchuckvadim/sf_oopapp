@@ -1,4 +1,6 @@
 
+import { dragAndDrop } from '../userPage/draganddrop.js';
+import { userLoader } from '../userPage/userLoader.js';
 import { tasksBlocks } from '../userPage/utilsForUsers.js';
 
 
@@ -51,29 +53,13 @@ export class Task extends BaseModel {
         //dropElement
         // this.div = draggedItems
         this.div.className = 'dragItem'
+        
         this.div.draggable = true;
         this.form.draggable = true;
-        this.p.draggable = true;
+        // this.p.draggable = true;
         this.input.draggable = true;
 
-
-        this.div.addEventListener("dragstart", handlerDragStart);
-        this.div.addEventListener("dragEnd", handlerDragEnd);
-        this.div.addEventListener("drag", handlerDrag);
-
-        this.div.addEventListener('dragenter', () => {
-
-            if (draggedItem !== droppedItem) {
-                droppedItem = this.div;
-            }
-
-            console.log('dragEnter')
-        })
-        this.div.addEventListener('dragleave', () => {
-
-            droppedItem = null;
-
-        })
+        
     }
 
 
@@ -167,6 +153,7 @@ export class Task extends BaseModel {
         this.input.value = value;
         this.value = value;
         this.saveTask()
+        
 
     }
 

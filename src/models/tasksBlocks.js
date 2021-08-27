@@ -8,7 +8,7 @@ import {
 
 
 import {
-    createAndDeleteTask,
+    createAndDeleteTask, draggedItem, droppedItem,
     createTasksBlocks
 } from '../userPage/utilsForUsers.js';
 
@@ -38,6 +38,7 @@ import {
 import {
     appState, startApp
 } from '../app.js';
+import { dragAndDrop } from '../userPage/draganddrop.js';
 
 
 export const statusNames = ['Ready', 'InProgress', 'Finished'];
@@ -104,33 +105,13 @@ export class Tasks {
         this.dropDown.setAttribute('aria-label', 'Выберите задачу')
 
         this.dropDown.style.display = 'none';
-        // this.dropDownElements = document.getElementById('dropDownElements')
-
-
-
-
-
-
-
-        this.tasksCardsDiv.addEventListener("dragenter", handlerDragEnter);
-        this.tasksCardsDiv.addEventListener("dragleave", handlerDragleave);
-        this.tasksCardsDiv.addEventListener("dragover", handlerDragover);
-        this.tasksCardsDiv.addEventListener("drop", handlerDrop);
-
-        this.tasksCardsDiv.addEventListener("handlerDrop", handlerDrop);
+      
 
 
     };
 
-    // deleteLastTask(){ //удаляет последнюю задачу из массива
-    //     if(this.tasks != []){
+    
 
-    //         this.tasks.pop();
-
-    //     }else{
-    //         return false
-    //     }
-    // };
 
     renderTasks() { //отрисовывает div, содержащий все задачи и +addCard
         if (this.div) {
@@ -139,6 +120,7 @@ export class Tasks {
             this.div.appendChild(this.submitAddCard);
             this.div.appendChild(this.dropDown);
             this.addTask();
+
             // this.submitAddCard.addEventListener('click', () => {
 
 
@@ -193,6 +175,8 @@ export class Tasks {
         })
 
         // testAddToLocalStorage(this.usersId) //записывает в localStorage
+    //    dragAndDrop()
+   
         return task
     }
 
@@ -201,6 +185,7 @@ export class Tasks {
         this.tasks[this.tasks.length - 1].renderTask(this.tasksCardsDiv);
         // testAddToLocalStorage(this.usersId) //записывает в localStorage
 
+        
 
 
     }
@@ -210,7 +195,7 @@ export class Tasks {
         // testAddToLocalStorage(this.usersId) //записывает в localStorage
         // this.tasks[this.tasks.length - 1].saveTask()
 
-
+       
 
 
     }

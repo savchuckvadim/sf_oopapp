@@ -25,23 +25,43 @@
 
 // const input = document.querySelectorAll('input')
 // const p = document.createElement('p')
-import { Tasks } from "../models/tasksBlocks.js";
+import {
+    Tasks
+} from "../models/tasksBlocks.js";
 import Task from "../models/task.js"
-import { addCard } from "./utilsForUsers.js";
-import { renderUserPage } from "./utilsForUsers.js";
+import {
+    addCard
+} from "./utilsForUsers.js";
+import {
+    renderUserPage
+} from "./utilsForUsers.js";
 
 
 
 
-import { createTasksBlocks} from "./utilsForUsers.js";
+import {
+    createTasksBlocks
+} from "./utilsForUsers.js";
 // import {tasksBlocks} from "../models/tasksBlocks.js"
 
 
 
-import { changeState, out } from "../utils.js";
-import { loadMainPage } from "../mainPage/mainPage.js";
+import {
+    changeState,
+    out
+} from "../utils.js";
+import {
+    loadMainPage
+} from "../mainPage/mainPage.js";
 
-import { app, appState, createAdminUser } from "../app.js";
+import {
+    app,
+    appState,
+    createAdminUser
+} from "../app.js";
+import {
+    dragAndDrop
+} from "./draganddrop.js";
 
 
 
@@ -55,12 +75,15 @@ import { app, appState, createAdminUser } from "../app.js";
 
 
 
-export function userLoader(){
- 
+export function userLoader() {
+
     renderUserPage()
     createTasksBlocks(appState);
-    
+    dragAndDrop()
     const btnOut = document.getElementById('admin__btn');
+
+    const kanbanContent = document.getElementById('kanban__content')
+    kanbanContent.addEventListener('change', dragAndDrop)
     // btnOut.addEventListener('click', () => {
     //     out()
     //     changeState()

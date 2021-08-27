@@ -12,6 +12,8 @@ export class User extends BaseModel {
     this.login = login;
     this.password = password;
     this.storageKey = "users";
+    this.draggedItem = null;
+    this.droppedItem = null;
     
   }
   get hasAccess() {

@@ -148,97 +148,97 @@ export function allInputInP() {
 
 
 // const dragItems = document.querySelectorAll('.dragItem');
-const dropZones = document.querySelectorAll('.dropZone');
+// const dropZones = document.querySelectorAll('.dropZone');
 
 
 /////////////////////////////////////////DRAG AND DROP///////////////////////////////////////////////////////////
 
-export function handlerDragStart(event) {
+// export function handlerDragStart(event) {
 
-    console.log('dragstart')
-    // event.dataTransfer.setData('dragItem', this.dataset.item)
-    this.classList.add('dragItem--active')
-    draggedItem = this;
+//     console.log('dragstart')
+//     // event.dataTransfer.setData('dragItem', this.dataset.item)
+//     this.classList.add('dragItem--active')
+//     draggedItem = this;
 
-}
+// }
 
-export function handlerDragEnd(event) {
+// export function handlerDragEnd(event) {
 
-    this.classList.remove('dragItem--active')
-    draggedItem = null;
-}
+//     this.classList.remove('dragItem--active')
+//     draggedItem = null;
+// }
 
-export function handlerDrag(e) { //событие возникает быстро и постоянно
-
-
-
-}
-
-
-export function handlerDragEnter(e) {
-
-    e.preventDefault();
-    this.classList.add('dropZone--active')
-
-
-}
-
-export function handlerDragleave() {
-
-    this.classList.remove('dropZone--active')
-    // const testElement = document.getElementById('test--element');
-    // testElement.remove();
-
-}
-
-export function handlerDragover(e) {
-    e.preventDefault();
-
-}
-
-export function handlerDrop(event) {
-
-    if (droppedItem) {
-        if (droppedItem.parentElement === draggedItem.parentElement) {
-            const children = Array.from(droppedItem.parentElement.children)
-            const draggedIndex = children.indexOf(draggedItem);
-            const droppedIndex = children.indexOf(droppedItem);
-
-
-            if (draggedIndex > droppedIndex) {
-                draggedItem.parentElement.insertBefore(draggedItem, droppedItem)
-
-                // console.log(` if (draggedIndex > droppedIndex) ${readyTasks, inProgressTasks, finishedTasks }`)
+// export function handlerDrag(e) { //событие возникает быстро и постоянно
 
 
 
-
-            } else {
-                draggedItem.parentElement.insertBefore(draggedItem, droppedItem.nextElementSibling)
-                // console.log(readyTasks, inProgressTasks,  finishedTasks)
-                // console.log(`else ${readyTasks, inProgressTasks, finishedTasks }`)
+// }
 
 
-            }
+// export function handlerDragEnter(e) {
+
+//     e.preventDefault();
+//     this.classList.add('dropZone--active')
+
+
+// }
+
+// export function handlerDragleave() {
+
+//     this.classList.remove('dropZone--active')
+//     // const testElement = document.getElementById('test--element');
+//     // testElement.remove();
+
+// }
+
+// export function handlerDragover(e) {
+//     e.preventDefault();
+
+// }
+
+// export function handlerDrop(event) {
+
+//     if (droppedItem) {
+//         if (droppedItem.parentElement === draggedItem.parentElement) {
+//             const children = Array.from(droppedItem.parentElement.children)
+//             const draggedIndex = children.indexOf(draggedItem);
+//             const droppedIndex = children.indexOf(droppedItem);
+
+
+//             if (draggedIndex > droppedIndex) {
+//                 draggedItem.parentElement.insertBefore(draggedItem, droppedItem)
+
+//                 // console.log(` if (draggedIndex > droppedIndex) ${readyTasks, inProgressTasks, finishedTasks }`)
+
+
+
+
+//             } else {
+//                 draggedItem.parentElement.insertBefore(draggedItem, droppedItem.nextElementSibling)
+//                 // console.log(readyTasks, inProgressTasks,  finishedTasks)
+//                 // console.log(`else ${readyTasks, inProgressTasks, finishedTasks }`)
+
+
+//             }
             
-        }
+//         }
 
-        console.log('dropped one parents')
-        console.log(tasksBlock)
+//         console.log('dropped one parents')
+//         console.log(tasksBlock)
 
-    } else {
-        this.append(draggedItem)
+//     } else {
+//         this.append(draggedItem)
         
-        console.log('разные родительские элементы')
-        transferTasks(tasksBlocks[0], tasksBlocks[1], tasksBlocks[2]);
-        transferTasks(tasksBlocks[1], tasksBlocks[0], tasksBlocks[2]);
-        transferTasks(tasksBlocks[2], tasksBlocks[0], tasksBlocks[1]);
+//         console.log('разные родительские элементы')
+//         transferTasks(tasksBlocks[0], tasksBlocks[1], tasksBlocks[2]);
+//         transferTasks(tasksBlocks[1], tasksBlocks[0], tasksBlocks[2]);
+//         transferTasks(tasksBlocks[2], tasksBlocks[0], tasksBlocks[1]);
 
 
-    }
-    
+//     }
+//     console.log(tasksBlocks)
 
-}
+// }
 
 
 export function transferTasks(tasksBlock, otherBlock1, otherBlock2) {
