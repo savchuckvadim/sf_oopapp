@@ -1,5 +1,6 @@
 import {
   app,
+  pageLoader,
   users
 } from "./app";
 import {
@@ -86,6 +87,7 @@ export function out() {
   localStorage.removeItem('currentUser');
   changeState();
   startApp();
+  
 }
 export function btnOut(parentElement) {
   const btnOut = document.createElement('input');

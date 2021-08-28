@@ -157,15 +157,7 @@ export function dragAndDrop() {
         })
         saveUpgradedTasksToTasksBlocks(items)
 
-        //todo - загрузить массив задач в localStorage чтобы отрисовывались потом в том же порядке
-        // console.log(tasksBlocks)
-        // dragItems.forEach((dragItem, index) => {
-        //     dragItem.setAttribute('data-item', index)
-        // })
-        // document.location.reload() //не могу понять причину появления 'null' - по количеству задач при перетаскивании вновь созданной задачи. при перезагрузки страницы эти элементы исчезают пока не решу проблему оставлю здесь функцию перезагрузки страницы
-        console.log(tasksBlocks[0].tasks)
-        console.log(tasksBlocks[1].tasks)
-        console.log(tasksBlocks[2].tasks)
+        
     }
 
    

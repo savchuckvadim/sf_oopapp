@@ -266,40 +266,12 @@ export class Tasks {
 
                         foundTask = draggingFromBlock.tasks[i]
 
-                        window.alert(foundTask.number)
+                        
 
                     }
 
                 }
-                // return foundedTask
-                //    }
-                //    console.log('foundTask from dropdown')
-                //    console.log(foundTask)
-                /////////////////////////////////В некоторых случаях foundTask = undifined
-                // createAndDeleteTask(foundTask, this)
-
-                // this.createTask(foundTask.id)
-
-                // let thisTask = this.tasks[this.tasks.length - 1];
-                // this.renderTransitionTask();
-                // thisTask.taskValue(foundTask.value)
-                // thisTask.setUserId(foundTask.userId)
-
-                // thisTask.number = this.tasks.length - 1
-                // thisTask.status = this.status
-                // thisTask.renderTask(this.tasksCardsDiv)
-
-                // let event = new Event("click");
-                // thisTask.p.dispatchEvent(event);
-                // thisTask.submit.dispatchEvent(event);
-
-                // this.addCardDisplay();
-                // if(foundTask.div) {
-                //     foundTask.deleteTask();
-                // }
-
-                // draggingFromBlock.tasks.splice(foundTask.number, 1)
-                // thisTask.saveTask()
+               
 
                 createAndDeleteTask(foundTask, this)
                 this.dropDown.style.display = 'none';

@@ -47,15 +47,6 @@ import {
 import {
   State
 } from "./state";
-import {
-  authUser
-} from "./services/auth";
-// import {
-//   adminBtnOut,
-//   adminUserBtn,
-//   setAdminDiv,
-//   registrNewUser
-// } from "../src/models/adminUser.js";
 
 import {
   loadMainPage,
@@ -84,12 +75,14 @@ startApp();
 
 
 export function pageLoader() {
+  const globalContent = document.getElementById('global__content')
   let fieldHTMLContent;
   if (appState.currentUser) {
     if (appState.currentUser.login == 'admin' && appState.currentUser.password == 'admin') {
       //загрузка страницы админа
-      loadAdminPage()
-      adminUserFunction(users);
+      loadAdminPage(globalContent)
+      
+      // adminUserFunction(users);
       // adminBtnOut()
     } else {
       // загрузка страницы пользователя

@@ -2,7 +2,7 @@
     <header>
         <nav class="user__header__navbar navbar ">           
             <div class="btn-group user__header__navbar__container__fluid btn-group container-fluid d-flex justify-content-end  justify-content-sm-between">
-                <a id="brand" class="user__header__navbar__brand navbar-brand col-md-2" href="#">Иван Иванов Kanban Board</a>
+                <a id="brand" class="user__header__navbar__brand navbar-brand col-md-2" href="#"> <span class="user__name">Ivan Ivanov</span> Kanban Board</a>
                 <div class="user__header__navbar__dropdown dropdown">
                 <button type="button" class="user__header__dropdown__btn btn dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
                     <img class="user__header__navbar__account__icon" src="../img/userPage/person-circle.svg"
@@ -21,7 +21,7 @@
 
     </header>
 
-    <main>
+    <main class="user__main">
         <div class="kanban">
             <!-- <div class="container">
                 <div class="row">
@@ -73,17 +73,17 @@
         </div>
     </div> -->
 
-    <footer>
+    <footer class="user__footer">
         <div class="footer__container container-fluid">
             <div class="footer__row row d-flex flex-row justify-content-md-between ">
                 <div class="admin__footer__allInProgressTasks__block col-xlg-1 col-lg-3 col-md-4 col-sm-12">
-                    <p class="admin__footer__allInProgressTasks__text ">Количество задач в работе: 1890</p>
+                    <p id="user__footer__duringTasks" class="admin__footer__allInProgressTasks__text ">Количество задач в работе: </p>
                 </div>
                 <div class="admin__footer__allInProgressTasks__block col-xlg-1 col-lg-3 col-md-4 col-sm-12">
-                    <p class="admin__footer__allInProgressTasks__text ">Количество задач в работе: 1890</p>
+                    <p id="user__footer__completedTasks" class="admin__footer__allInProgressTasks__text ">Количество завершённых задач: </p>
                 </div>
                 <div class="admin__footer__allFinishedTasks__block   col-xlg-1 col-lg-3 col-md-3 col-sm-12 ">
-                    <p class="admin__footer__allFinishedTasks__text">Kanban Board by Ivan Ivanov </p>
+                    <p class="admin__footer__allFinishedTasks__text">Kanban Board by <span class="user__name">Ivan Ivanov</span>  </p>
                 </div>
             </div>
         </div>

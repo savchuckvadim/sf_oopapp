@@ -30,7 +30,7 @@ import {
 } from "../models/tasksBlocks.js";
 import Task from "../models/task.js"
 import {
-    addCard
+    addCard, renderNameOfUser
 } from "./utilsForUsers.js";
 import {
     renderUserPage
@@ -78,12 +78,14 @@ import {
 export function userLoader() {
 
     renderUserPage()
-    createTasksBlocks(appState);
+    createTasksBlocks(appState.currentUser);
     dragAndDrop()
     const btnOut = document.getElementById('admin__btn');
 
     const kanbanContent = document.getElementById('kanban__content')
-    kanbanContent.addEventListener('change', dragAndDrop)
+    kanbanContent.addEventListener('change', dragAndDrop)  //загружает функционал драг энд дропа
+
+    renderNameOfUser(appState, 'user__name')
     // btnOut.addEventListener('click', () => {
     //     out()
     //     changeState()
