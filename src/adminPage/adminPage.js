@@ -23,28 +23,37 @@ import admin from "../templates/admin.html"
 import {
     allTasksLoader
 } from './adminAllTasksPage';
+import {
+    createAdminPage
+} from '../models/adminPageClass';
 
 const globalContent = document.getElementById('global__content')
 
 
 export function loadAdminPage() {
+    const globalContent = document.getElementById('global__content')
+    globalContent.innerHTML = admin
+    const adminDropdown = document.getElementById('dropdown-menu')
+    // console.log(adminDropdown)
+    const adminWrapper = document.getElementById('admin__wrapper')
+    const adminPage = createAdminPage(adminWrapper, adminDropdown)
+    console.log(adminPage)
+    // globalContent.innerHTML = admin;
+    // const htmlQuantityOfUsers  = document.getElementById('admin__footer__allUsers__text')
+    // const htmlQuantityOfInProcesTasks = document.getElementById('admin__footer__allInProgressTasks__text')
+    // const htmlQuantityOfFinishedTasks = document.getElementById('admin__footer__allFinishedTasks__text')
+    // const btnOut = document.getElementById('admin__btn');
+    // const dropDownDiv = document.getElementById('dropdown-menu')
 
-    globalContent.innerHTML = admin;
-    const htmlQuantityOfUsers  = document.getElementById('admin__footer__allUsers__text')
-    const htmlQuantityOfInProcesTasks = document.getElementById('admin__footer__allInProgressTasks__text')
-    const htmlQuantityOfFinishedTasks = document.getElementById('admin__footer__allFinishedTasks__text')
-    const btnOut = document.getElementById('admin__btn');
-    const dropDownDiv = document.getElementById('dropdown-menu')
-
-    btnOut.addEventListener('click', () => {
-        out()
-    })
+    // btnOut.addEventListener('click', () => {
+    //     out()
+    // })
 
 
-    dropDownContent(dropDownDiv)
-    adminUserFunction(users)
-    allHtmlQuantity(htmlQuantityOfUsers, htmlQuantityOfInProcesTasks, htmlQuantityOfFinishedTasks)
-    
+    // dropDownContent(dropDownDiv)
+    // adminUserFunction(users)
+    // allHtmlQuantity(htmlQuantityOfUsers, htmlQuantityOfInProcesTasks, htmlQuantityOfFinishedTasks)
+
 }
 
 function dropDownContent(dropDownDiv) {
@@ -85,18 +94,18 @@ function loadTableUsers() {
 
     adminTableWrapper.innerHTML = `
     <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Login</th>
-                                    <th scope="col">Password</th>
-                                    <th scope="col">Delete</th>
-                                </tr>
-                            </thead>
-                            <tbody id='admin__usersTable__body'>
-                                
-                            </tbody>
-                        </table>
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Login</th>
+                <th scope="col">Password</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody id='admin__usersTable__body'>
+
+        </tbody>
+    </table>
     `
 
 }
@@ -173,7 +182,6 @@ export function registrNewUser() {
     adminForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
-
         const formData = new FormData(adminForm);
         const login = formData.get("login");
         const password = formData.get("password");
@@ -227,7 +235,7 @@ function quantityOfUsers() {
 function quantityOfInprogressTasks() {
     const tasks = getFromStorage('tasks')
     let inProgres = []
-    
+
     tasks.forEach(element => {
         if (element.status == 'Ready' || element.status == 'InProgress') {
             inProgres.push(element)
@@ -238,7 +246,7 @@ function quantityOfInprogressTasks() {
 
 function quantityOfFinishedTasks() {
     const tasks = getFromStorage('tasks')
-    
+
     let finished = []
     tasks.forEach(element => {
         if (element.status == 'Finished') {

@@ -1,5 +1,5 @@
 import admin from "../templates/admin.html"
-import { users } from "../app"
+
 import { dragAndDrop } from "../userPage/draganddrop"
 import { createTasksBlocks } from "../userPage/utilsForUsers"
 import { getFromStorage } from "../utils"
@@ -10,6 +10,8 @@ import {
 
 
 const globalContent = document.getElementById('global__content')
+
+
 export function allTasksLoader() {
     globalContent.innerHTML = admin;
     loadAdminPage(globalContent)
@@ -21,6 +23,7 @@ export function allTasksLoader() {
                 class="row d-flex justify-content-between align-items-center align-items-md-start flex-column flex-md-row">
     `
     const kanban = document.getElementById('kanban__content')
+    let users = getFromStorage('users')
     users.forEach(element => {
         const htmlNameOfUser = document.createElement('h2')
         htmlNameOfUser.innerText = element.login

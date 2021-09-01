@@ -62,6 +62,7 @@ import {
 import {
     dragAndDrop
 } from "./draganddrop.js";
+import { Footer } from "../models/footer.js";
 
 
 
@@ -85,12 +86,13 @@ export function userLoader() {
     const kanbanContent = document.getElementById('kanban__content')
     kanbanContent.addEventListener('change', dragAndDrop)  //загружает функционал драг энд дропа
 
-    renderNameOfUser(appState, 'user__name')
+    // renderNameOfUser(appState, 'user__name')
     // btnOut.addEventListener('click', () => {
     //     out()
     //     changeState()
     //     app()
     // })
+    // footer.footerContent()
 }
 
 

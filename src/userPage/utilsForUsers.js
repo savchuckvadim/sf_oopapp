@@ -21,6 +21,7 @@ let inProgressTasks;
 let finishedTasks;
 
 import app from "../app"
+import { Footer } from "../models/footer.js";
 export var tasksBlocks = [];
 
 export let draggedItem = null;
@@ -31,17 +32,17 @@ export function renderUserPage() { //отрисовывает div для userPag
     // userPage.id = 'kanban__content';
     document.querySelector('#global__content').innerHTML = userPage;
 
-    document.querySelector('#admin__btn').addEventListener('click', (e) => {
-        e.preventDefault();
-        kanbanOut();
-    })
+    // document.querySelector('#admin__btn').addEventListener('click', (e) => {
+    //     e.preventDefault();
+    //     kanbanOut();
+    // })
 }
 
-function kanbanOut() {
-    localStorage.removeItem('currentUser');
-    changeState() ///////////////////////////////////////////////////
-    startApp();
-}
+// function kanbanOut() {
+//     localStorage.removeItem('currentUser');
+//     changeState() ///////////////////////////////////////////////////
+//     startApp();
+// }
 
 export function createTasksBlocks(appStateCurrentUser) { /////////////создаёт блоки задач и отрисовывает их  в зависимости от statusNames
     //////////// возвращает массив блоков, которые потом записываются в пользователей
@@ -61,17 +62,15 @@ export function createTasksBlocks(appStateCurrentUser) { /////////////созда
     finishedTasks = tasksBlocks[2];
 
 
-    renderRelevantTasks(appStateCurrentUser, tasksBlocks)
+    renderRelevantTasks(appStateCurrentUser)
 
     return tasksBlocks
 }
 
 function renderRelevantTasks(appStateCurrentUser) {
+    const footer = new Footer()
 
-    let quantityOfDuringTasksCounter = 0
-    let quantityOfCompletedTasksCounter = 0
-
-    let allRelevantTasks = getFromStorage('tasks');
+    let allRelevantTasks = getFromStorage('tasks');//
     let allRelevantTasksOfCurrentUser = []
     // собрать массив задач из localStorage
     // найти принадлежащие текущему пользователю 
@@ -86,67 +85,57 @@ function renderRelevantTasks(appStateCurrentUser) {
     for (let i = 0; i < allRelevantTasksOfCurrentUser.length; i++) {
         if (allRelevantTasksOfCurrentUser[i].status == tasksBlocks[0].status) {
             createAndDeleteTask(allRelevantTasksOfCurrentUser[i], tasksBlocks[0])
-            quantityOfDuringTasksCounter++
-            if (appState.currentUser.login != 'admin' && appState.currentUser.password != 'admin') {
-                renderQuantityTasksOnUserPage(true, quantityOfDuringTasksCounter, quantityOfCompletedTasksCounter, 'user__footer__duringTasks', 'user__footer__completedTasks')
-
-            }
+            
 
         } else if (allRelevantTasksOfCurrentUser[i].status == tasksBlocks[1].status) {
             createAndDeleteTask(allRelevantTasksOfCurrentUser[i], tasksBlocks[1])
-            quantityOfDuringTasksCounter++
-            if (appState.currentUser.login != 'admin' && appState.currentUser.password != 'admin') {
-                renderQuantityTasksOnUserPage(true, quantityOfDuringTasksCounter, quantityOfCompletedTasksCounter, 'user__footer__duringTasks', 'user__footer__completedTasks')
-
-            }
+            
 
         } else if (allRelevantTasksOfCurrentUser[i].status == tasksBlocks[2].status) {
             createAndDeleteTask(allRelevantTasksOfCurrentUser[i], tasksBlocks[2])
-            quantityOfCompletedTasksCounter++
-            if (appState.currentUser.login != 'admin' && appState.currentUser.password != 'admin') {
-                renderQuantityTasksOnUserPage(false, quantityOfDuringTasksCounter, quantityOfCompletedTasksCounter, 'user__footer__duringTasks', 'user__footer__completedTasks')
-
-            }
+           
 
         }
 
 
     }
+    footer.footerContent()
+    // footer.startFooter()
 
     // на каждое совпадение создать новый объект задачи
     // поместить во вновь созданные данные из объектов из locqalStorage
 
 }
 
-function renderQuantityTasksOnUserPage(allRelevantTasksOfCurrentUserStatus, quantityOfDuringTasksCounter, quantityOfCompletedTasksCounter, user__footer__duringTasks, user__footer__completedTasks) { //отрисовывает количество задач в процессе и завершенных в зависисости от количества указанного в счетчиках, передаваемых в функцию
-    //TODO - не работает во время создания-удаления задач и драг энд дропа
-    // при этом нормально актуализирует информацию при перезагрузке страницы и при перемещении задач через дроп-даун
-    const duringTasks = document.getElementById(user__footer__duringTasks)
-    const completedTasks = document.getElementById(user__footer__completedTasks)
-    if (allRelevantTasksOfCurrentUserStatus == true) {
+// function renderQuantityTasksOnUserPage(allRelevantTasksOfCurrentUserStatus, quantityOfDuringTasksCounter, quantityOfCompletedTasksCounter, user__footer__duringTasks, user__footer__completedTasks) { //отрисовывает количество задач в процессе и завершенных в зависисости от количества указанного в счетчиках, передаваемых в функцию
+//     //TODO - не работает во время создания-удаления задач и драг энд дропа
+//     // при этом нормально актуализирует информацию при перезагрузке страницы и при перемещении задач через дроп-даун
+//     const duringTasks = document.getElementById(user__footer__duringTasks)
+//     const completedTasks = document.getElementById(user__footer__completedTasks)
+//     if (allRelevantTasksOfCurrentUserStatus == true) {
 
-    } else if (allRelevantTasksOfCurrentUserStatus == false) {
+//     } else if (allRelevantTasksOfCurrentUserStatus == false) {
 
-    } else {
-        window.alert('ljnewcvnewf')
-    }
-    duringTasks.innerText = `Количество задач в работе: ${quantityOfDuringTasksCounter}`
-    completedTasks.innerText = `Количество завершённых задач: ${quantityOfCompletedTasksCounter}`
-}
+//     } else {
+//         window.alert('ljnewcvnewf')
+//     }
+//     duringTasks.innerText = `Количество задач в работе: ${quantityOfDuringTasksCounter}`
+//     completedTasks.innerText = `Количество завершённых задач: ${quantityOfCompletedTasksCounter}`
+// }
 
-export function renderNameOfUser(appState, html) {
-    if (appState.currentUser) {
-        if (html) {
+// export function renderNameOfUser(appState, html) {
+//     if (appState.currentUser) {
+//         if (html) {
 
-            const userName = document.getElementsByClassName('user__name')
-            userName[0].innerText = appState.currentUser.login
-            userName[1].innerText = appState.currentUser.login
-            // userName.forEach((element) => {
-            //     element.innerText = appState.currentUser.login
-            // })
-        }
-    }
-}
+//             const userName = document.getElementsByClassName('user__name')
+//             userName[0].innerText = appState.currentUser.login
+//             userName[1].innerText = appState.currentUser.login
+//             // userName.forEach((element) => {
+//             //     element.innerText = appState.currentUser.login
+//             // })
+//         }
+//     }
+// }
 
 export function addCard(status) {
 
@@ -165,7 +154,7 @@ export function addCard(status) {
 
 
 
-export function createTask(statusTasks) {
+export function createTask(statusTasks) { //нигде не используется
 
     let task = statusTasks.createTask();
 
@@ -185,7 +174,7 @@ export function createTask(statusTasks) {
 
 
 
-export function allInputInP() {
+export function allInputInP() {    //перенести в TasksBlocks
 
     readyTasks.inputP();
 
@@ -195,7 +184,7 @@ export function allInputInP() {
 
 
 
-export function transferTasks(tasksBlock, otherBlock1, otherBlock2) {
+export function transferTasks(tasksBlock, otherBlock1, otherBlock2) { //////нигде не используется
 
     if (tasksBlock.tasks != null) {
         tasksBlock.tasks.forEach((element) => { //перебирает объединенный массив задач из текущего блока задач taskBlock element - объект задачи

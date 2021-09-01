@@ -39,6 +39,7 @@ import {
     appState, startApp
 } from '../app.js';
 import { dragAndDrop } from '../userPage/draganddrop.js';
+import { Footer } from './footer.js';
 
 
 export const statusNames = ['Ready', 'InProgress', 'Finished'];
@@ -176,27 +177,41 @@ export class Tasks {
 
         // testAddToLocalStorage(this.usersId) //записывает в localStorage
     //    dragAndDrop()
-   
+
         return task
     }
 
     renderCreatedTask() {
 
-        this.tasks[this.tasks.length - 1].renderTask(this.tasksCardsDiv);
-        // testAddToLocalStorage(this.usersId) //записывает в localStorage
-
+       
         
+        this.tasks[this.tasks.length - 1].renderTask(this.tasksCardsDiv);
+       
 
+    
+       
 
     }
     renderTransitionTask() {
+      
+        
 
         this.tasksCardsDiv.appendChild(this.tasks[this.tasks.length - 1].div)
         // testAddToLocalStorage(this.usersId) //записывает в localStorage
         // this.tasks[this.tasks.length - 1].saveTask()
 
-       
+           // thisTask.taskValue(oldTask.value)                   //////////закоменченное перенести в определение функции renderTransitionTask
+        // thisTask.setUserId(oldTask.userId)
+        // thisTask.number = otherBlock.tasks.length - 1
+        // thisTask.status = otherBlock.status
 
+        // thisTask.renderTask(otherBlock.tasksCardsDiv)
+
+        // let event = new Event("click");
+        // thisTask.p.dispatchEvent(event);
+        // thisTask.submit.dispatchEvent(event);
+
+        
 
     }
 

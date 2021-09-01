@@ -83,16 +83,16 @@ export function changeState() { // изменяет состояние в зав
 
 
 
-export function out() {
-  localStorage.removeItem('currentUser');
-  changeState();
-  startApp();
+// export function out() {
+//   localStorage.removeItem('currentUser');
+//   changeState();
+//   startApp();
   
-}
-export function btnOut(parentElement) {
-  const btnOut = document.createElement('input');
-  btnOut.setAttribute('type', 'button');
-  btnOut.className = `${parentElement.className}__btnOut `
+// }
+// export function btnOut(parentElement) {
+//   const btnOut = document.createElement('input');
+//   btnOut.setAttribute('type', 'button');
+//   btnOut.className = `${parentElement.className}__btnOut `
 
 
-}
+// }

@@ -37,7 +37,7 @@ import {
   currentUserData
 } from "./utils";
 
-import "../src/models/adminUser.js"
+
 import {
   setAdminDiv,
   adminBtnOut,
@@ -52,11 +52,14 @@ import {
   loadMainPage,
   mainPage
 } from "./mainPage/mainPage";
+import { Footer } from "./models/footer";
+import { BtnOut } from "./models/btnOut";
 export const appState = new State();
 
 export var users = getFromStorage('users'); // берет из localstorage массив пользователей выводит л-п каждого в консоль
 
-
+export const footer = new Footer()
+footer.startFooter()
 
 export function startApp() {
   
@@ -75,12 +78,15 @@ startApp();
 
 
 export function pageLoader() {
+  
   const globalContent = document.getElementById('global__content')
   let fieldHTMLContent;
   if (appState.currentUser) {
     if (appState.currentUser.login == 'admin' && appState.currentUser.password == 'admin') {
       //загрузка страницы админа
       loadAdminPage(globalContent)
+      const btnOut = new BtnOut()
+      btnOut.outElementContent()
       
       // adminUserFunction(users);
       // adminBtnOut()
@@ -89,6 +95,8 @@ export function pageLoader() {
       // console.log(appState.currentUser.id)
       // fieldHTMLContent = taskFieldTemplate;
        userLoader();
+       const btnOut = new BtnOut()
+       btnOut.outElementContent()
 
     }
 
@@ -100,6 +108,7 @@ export function pageLoader() {
   }
   // document.querySelector("#global__content").innerHTML = fieldHTMLContent;
 
+ 
 }
 
 

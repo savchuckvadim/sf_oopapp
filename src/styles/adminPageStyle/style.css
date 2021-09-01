@@ -46,7 +46,7 @@ header {
 } */
 
 
-#admin__btn{
+#admin__btn, #user__btn{
 margin-left: 5vh;
     padding: 0;
     display: flex;
