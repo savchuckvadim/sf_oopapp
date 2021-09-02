@@ -51,10 +51,12 @@ export const generateAdminUser = function (User) {
 
 
 export const addCurrentUser = (login, password) => { // функция создания в localstorage текущего пользователя
-
+let users = getFromStorage('users');
   users.forEach(element => { //перебирает всех users по логину если находит среди 
     // их логинов переданный логин - вставляет в localstorage currentUser - этого юзера, он становится текущим
+    
     if (element.login == login && element.password == password) {
+     
       addToStorageCurrentUser(element, 'currentUser');
 
     }
@@ -108,7 +110,7 @@ export function createAdminUser() { //должна запускаться есл
 }  
 
 function searchUserInLocalStorage(login, password) { //проверяет есть ли в users.localStorage пользователь с передаваемыми логином и паролем
-
+console.log((users.some(obj => obj.login == login && obj.password == password)))
   return (users.some(obj => obj.login == login && obj.password == password))
 }
 
