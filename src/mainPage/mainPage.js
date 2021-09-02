@@ -64,13 +64,13 @@ export function loadMainPage(app) {
     const loginForm = document.querySelector("#app-login-form");
     loginForm.addEventListener("submit", function (e) { //авторизация
         e.preventDefault();
-        window.alert('loginFormListener()');
+       
         const formData = new FormData(loginForm);
         const login = formData.get("login");
         const password = formData.get("password");
         // window.alert('loginForm.addEventListener');
         //loadUsersAccount(login, password); //загружает HTML по введенным данным пользователя если auth = true
-        addCurrentUser(login);
+        addCurrentUser(login, password);
         
         changeState(); //меняет состояние на текущий пользователь, если он существует
        

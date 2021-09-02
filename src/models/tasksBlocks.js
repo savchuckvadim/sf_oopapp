@@ -8,7 +8,9 @@ import {
 
 
 import {
-    createAndDeleteTask, draggedItem, droppedItem,
+    createAndDeleteTask,
+    draggedItem,
+    droppedItem,
     createTasksBlocks
 } from '../userPage/utilsForUsers.js';
 
@@ -36,10 +38,15 @@ import {
     getFromStorage
 } from '../utils.js';
 import {
-    appState, startApp
+    appState,
+    startApp
 } from '../app.js';
-import { dragAndDrop } from '../userPage/draganddrop.js';
-import { Footer } from './footer.js';
+import {
+    dragAndDrop
+} from '../userPage/draganddrop.js';
+import {
+    Footer
+} from './footer.js';
 
 
 export const statusNames = ['Ready', 'InProgress', 'Finished'];
@@ -49,21 +56,22 @@ export class Tasks {
 
     //создаёт div со списком всех задач
 
-    constructor(status, dataZoneNumber) {
+    constructor(status, dataZoneNumber, userPageObject) {
         this.status = status;
         this.dataZoneNumber = dataZoneNumber;
         this.tasks = [];
-        this.usersId = ''
+        this.usersId = userPageObject.userId
         this.counter = this.tasks.length;
         this.dropDownFlag = false
+        this.userPage = userPageObject
 
 
         //this.taskAddBtn = document.createElement('#task__add--button');  // кнопка должна создавать new Task
 
-        this.kanbanContent = document.querySelector('#kanban__content');
+        this.kanbanContent = this.userPage.content
         this.title = document.createElement('h3')
         this.tasksCardsDiv = document.createElement('div') //dropZone
-        this.tasksCardsDiv.className = 'dropZone'
+        this.tasksCardsDiv.className = `dropZone dropZone--${this.usersId} ${status}__task--cards`
         this.tasksCardsDiv.setAttribute('data-zone', this.dataZoneNumber);
 
 
@@ -77,7 +85,7 @@ export class Tasks {
 
         this.title.innerText = status;
 
-        this.tasksCardsDiv.className = `${status}__task--cards dropZone`
+        // this.tasksCardsDiv.className = `${status}__task--cards dropZone`
 
         this.submitAddCard.type = 'submit';
         this.submitAddCard.id = `${status}__add--button`;
@@ -106,12 +114,12 @@ export class Tasks {
         this.dropDown.setAttribute('aria-label', 'Выберите задачу')
 
         this.dropDown.style.display = 'none';
-      
+
 
 
     };
 
-    
+
 
 
     renderTasks() { //отрисовывает div, содержащий все задачи и +addCard
@@ -156,13 +164,13 @@ export class Tasks {
 
 
     createTask(id) { // создает задачу
-        let task = new Task(this.status, this.counter - 1);
+        let task = new Task(this.status, this.counter - 1, this.userPage);
 
         this.tasks.push(task);
         this.counter = this.tasks.length;
         task.div.setAttribute('data-item', this.tasks.length - 1)
 
-        task.setUserId(appState.currentUser.id);
+        task.setUserId(this.userPage.userId);
         if (id) {
             task.id = id
         }
@@ -176,42 +184,43 @@ export class Tasks {
         })
 
         // testAddToLocalStorage(this.usersId) //записывает в localStorage
-    //    dragAndDrop()
+        //    dragAndDrop()
 
         return task
     }
 
     renderCreatedTask() {
 
-       
-        
-        this.tasks[this.tasks.length - 1].renderTask(this.tasksCardsDiv);
-       
 
-    
-       
+
+        this.tasks[this.tasks.length - 1].renderTask(this.tasksCardsDiv);
+
+
+
+
 
     }
-    renderTransitionTask() {
-      
-        
+    renderTransitionTask(oldTask, newTask) {
+
+
 
         this.tasksCardsDiv.appendChild(this.tasks[this.tasks.length - 1].div)
         // testAddToLocalStorage(this.usersId) //записывает в localStorage
         // this.tasks[this.tasks.length - 1].saveTask()
 
-           // thisTask.taskValue(oldTask.value)                   //////////закоменченное перенести в определение функции renderTransitionTask
-        // thisTask.setUserId(oldTask.userId)
-        // thisTask.number = otherBlock.tasks.length - 1
-        // thisTask.status = otherBlock.status
+        newTask.taskValue(oldTask.value) //////////закоменченное перенести в определение функции renderTransitionTask
+        newTask.setUserId(oldTask.userId)
+        newTask.number = this.tasks.length - 1
+        newTask.status = this.status
 
-        // thisTask.renderTask(otherBlock.tasksCardsDiv)
+        newTask.renderTask(this.tasksCardsDiv)
 
-        // let event = new Event("click");
-        // thisTask.p.dispatchEvent(event);
-        // thisTask.submit.dispatchEvent(event);
+        let event = new Event("click");
+        newTask.p.dispatchEvent(event);
+        newTask.submit.dispatchEvent(event);
 
-        
+ 
+        //this.counter++ -----???
 
     }
 
@@ -237,8 +246,8 @@ export class Tasks {
     }
 
     dropDownContent() {
-        const draggingFromBlock = tasksBlocks[this.dataZoneNumber - 1]; //блок, из которого будем перемещать задачи
-        console.log(draggingFromBlock)
+        const draggingFromBlock = this.userPage.tasksBlocks[this.dataZoneNumber - 1]; //блок, из которого будем перемещать задачи
+        
         this.dropDown.style.display = 'inline-block'; //включает видимость выпадающего списка
         let firstOption = document.createElement('option'); //создаёт элемент option
         firstOption.setAttribute('selected', 'true') //обозначает его как выбранный
@@ -264,6 +273,7 @@ export class Tasks {
 
         this.dropDown.addEventListener('change', (e) => {
 
+            // e.preventDefault()
             if (!this.dropDownFlag) {
                 window.alert('change')
                 this.dropDownFlag = true
@@ -272,23 +282,17 @@ export class Tasks {
 
                 let foundTask
                 for (let i = 0; i < allOptions.length; i++) {
-                    console.log('allOptions[i')
-                    console.log(allOptions[i])
-                    console.log(draggingFromBlock.tasks[i])
+                    
                     if (allOptions[i].selected) { //находит отмеченный
-
-
 
                         foundTask = draggingFromBlock.tasks[i]
 
-                        
-
                     }
-
                 }
-               
 
-                createAndDeleteTask(foundTask, this)
+
+                console.log(foundTask)
+                this.userPage.createAndDeleteTask(foundTask, this.userPage.tasksBlocks[this.dataZoneNumber])
                 this.dropDown.style.display = 'none';
                 this.dropDown.parentNode.replaceChild(this.submitAddCard, this.dropDown)
 
@@ -299,17 +303,21 @@ export class Tasks {
                     e.remove()
                 });
                 firstOption.remove()
-                
-            }
-startApp()
 
+                this.dropDownFlag = false
+            }
+            
+            startApp()
+           
+            
         })
-        this.dropDownFlag = false
         
+
 
     }
 
 
+   
 
 
     inputP() {

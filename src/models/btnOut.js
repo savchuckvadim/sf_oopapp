@@ -38,11 +38,11 @@ export class BtnOut {
                 `
                 if (parentElement) parentElement.appendChild(this.outElement)
 
-                console.log(this.currentUser())
+               
             } else {
                 
                 parentElement = document.getElementById('user__header__outElement')
-                console.log(parentElement)
+                
                 this.outElement.id = 'user__btn'
                 this.outElement.className = 'btn__out'
                 this.outElement.textContent = 'Log Out'
@@ -54,7 +54,7 @@ export class BtnOut {
     }
 
     outAction() {
-        window.alert('btn_out')
+        window.alert('До Свидания!')
         localStorage.removeItem('currentUser')
         changeState()
         startApp()

@@ -3,7 +3,8 @@ import {
 } from "./BaseModel";
 import {
   getFromStorage,
-  addToStorage
+  addToStorage,
+  changeState
 } from "../utils";
 
 export class User extends BaseModel {
@@ -12,42 +13,39 @@ export class User extends BaseModel {
     this.login = login;
     this.password = password;
     this.storageKey = "users";
-    this.draggedItem = null;
-    this.droppedItem = null;
-    
+    this.dropDownFlag = false;
+
   }
+
   get hasAccess() {
-    
     let access = false;
     let users = getFromStorage(this.storageKey);
     if (users.length == 0) return false;
 
-
     users.forEach(element => {
-      
-
-      
-        if (element.login == this.login && element.password == this.password){
-          
-         return access = true;
-
-        }
-          
-      
+      if (element.login == this.login && element.password == this.password) {
+        return access = true;
+      }
     });
 
-
-
-    // for (let user of users) {
-    //   if (user.login == this.login && user.password == this.password)
-    //     window.alert('hasAccess true')
-    //   return true;
-    // }
-
-
-    //
     return access;
   }
+
+  // changeDropDownFlag() {
+  //   if (!this.dropDownFlag) {
+  //     this.dropDownFlag = true;
+
+  //   } else {
+  //     this.dropDownFlag = true;
+
+  //   }
+  //   this.storageKey = "currentUser"
+  //   this.save(this)
+  //   this.storageKey = "users"
+  //   changeState();
+  // }
+
+
   static save(user) {
     try {
       addToStorage(user, user.storageKey);

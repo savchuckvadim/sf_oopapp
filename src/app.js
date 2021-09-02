@@ -9,7 +9,7 @@ import taskFieldTemplate from "./templates/taskField.html";
 import noAccessTemplate from "./templates/noAccess.html";
 import admin from "./templates/admin.html"; //html админа
 import {
-  userLoader
+  userLoader, userPageObject
 } from "./userPage/userLoader.js"
 // import { Task } from "./userPage/models/task";
 // import { Tasks } from "./userPage/models/tasksBlocks";
@@ -42,7 +42,8 @@ import {
   setAdminDiv,
   adminBtnOut,
   loadAdminPage,
-  adminUserFunction
+  adminUserFunction,
+  adminPage
 } from "./adminPage/adminPage";
 import {
   State
@@ -84,7 +85,7 @@ export function pageLoader() {
   if (appState.currentUser) {
     if (appState.currentUser.login == 'admin' && appState.currentUser.password == 'admin') {
       //загрузка страницы админа
-      loadAdminPage(globalContent)
+      loadAdminPage()
       const btnOut = new BtnOut()
       btnOut.outElementContent()
       
@@ -222,10 +223,12 @@ export function createAdminUser() { //должна запускаться есл
       } else { //если в users.localStorage нет админа
         // console.log(users); //запускается два раза
 
+        console.log('если в users.localStorage нет админа')
         generateAdminUser(User); //генерит админа    
         return
       }
     } else { //если в users.localStorage ничего нет
+      console.log('если в users.localStorage ничего нет')
       generateAdminUser(User); //генерит админа
       return
     }

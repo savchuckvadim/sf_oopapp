@@ -1,7 +1,7 @@
 
 import { appState } from '../app.js';
 import { dragAndDrop } from '../userPage/draganddrop.js';
-import { userLoader } from '../userPage/userLoader.js';
+import { userLoader, userPageObject } from '../userPage/userLoader.js';
 import { tasksBlocks, renderRelevantTasks } from '../userPage/utilsForUsers.js';
 
 
@@ -14,13 +14,14 @@ import { BaseModel } from "./BaseModel.js";
 
 export class Task extends BaseModel {
 
-    constructor(status, number) {
+    constructor(status, number, userPageObject) {
 
         super();
         this.number = number;
         this.status = status;
         this.value = '';
-        this.userId = ''
+        this.userId = userPageObject.userId
+        this.userPage = userPageObject
         
 
         this.form = document.createElement('form'); //создаёт форму задачи
@@ -53,7 +54,7 @@ export class Task extends BaseModel {
 
         //dropElement
         // this.div = draggedItems
-        this.div.className = 'dragItem'
+        this.div.className = `dragItem dragItem--${this.userId}`
         
         this.div.draggable = true;
         this.form.draggable = true;
@@ -90,7 +91,7 @@ export class Task extends BaseModel {
                 this.divSubmits.style.display = 'none';
                 this.submitDelete.style.display = 'none';
                 this.submit.style.display = 'none'
-                addCard(this.status);
+                this.userPage.addCard(this.status);
     
             })
 
@@ -113,7 +114,7 @@ export class Task extends BaseModel {
 
 
         this.p.addEventListener('click', () => {
-            allInputInP();
+            this.userPage.allInputInP();
 
             this.p.replaceWith(this.input);
             this.div.parentElement.appendChild(this.divSubmits);
@@ -202,7 +203,7 @@ export class Task extends BaseModel {
     block() {
 
         let block
-        tasksBlocks.forEach((element) => {
+        this.userPage.tasksBlocks.forEach((element) => {
             if (element.status == this.status){
                 block = element
                 
@@ -213,6 +214,7 @@ export class Task extends BaseModel {
 
 
     saveTask(){
+        // window.alert('save task')
         let task = {
             'id' : this.id,
             'number' : this.number,
@@ -238,11 +240,9 @@ export class Task extends BaseModel {
             if (allId.some(searchID)){
                 for (let j = 0; j < allTasksFromLocalStorage.length; j++){
                     if (allTasksFromLocalStorage[j].id == this.id){
-                        allTasksFromLocalStorage.splice(j, 1, task)
-                        
+                        allTasksFromLocalStorage.splice(j, 1, task)    
                         // allTasksFromLocalStorage[i] = task;
-                    }                  
-                    
+                    }                   
                 }
                 
             }else{

@@ -49,11 +49,11 @@ export const generateAdminUser = function (User) {
 
 
 
-export const addCurrentUser = (login) => { // функция создания в localstorage текущего пользователя
+export const addCurrentUser = (login, password) => { // функция создания в localstorage текущего пользователя
 
   users.forEach(element => { //перебирает всех users по логину если находит среди 
     // их логинов переданный логин - вставляет в localstorage currentUser - этого юзера, он становится текущим
-    if (element.login == login) {
+    if (element.login == login && element.password == password) {
       addToStorageCurrentUser(element, 'currentUser');
 
     }
@@ -63,20 +63,26 @@ export const addCurrentUser = (login) => { // функция создания в
 
 
 
+export function changeCurrentUserInLocalStorage(user, value){ //изменение флага сначала в usere(например appState.currentUser) а затем в localStroage.currentUser 
+  user.dropDownFlag = value
+  addToStorageCurrentUser(user, 'currentUser')
 
+}
 
 export function changeState() { // изменяет состояние в зависимости от того есть ли текущий пользователь
   const currentUser = getFromStorage('currentUser'); //берет текущего пользователя из localStorage
   //  window.alert(currentUser[0]);
+  console.log(currentUser)
   if (currentUser.length != 0) { // если длина массива текущих пользователей не равно 0, т.е существует
-
+// let dropDownFlag = currentUser[0].dropDownFlag
     appState.currentUser = currentUser[0]; //вызывает сэттер состояния и вкладывает в appState currentUser
+    // appState.currentUser.dropDownFlag = dropDownFlag;
 
   }
-  //else{
-  //из-за этого всё ломается, но возможно это правильно
-  //   appState.currentUser = null; //иначе в состоянии устанавливает текущего пользователя равного null
-  // }
+  else{
+  // из-за этого всё ломается, но возможно это правильно
+    appState.currentUser = null; //иначе в состоянии устанавливает текущего пользователя равного null
+  }
   
 
 }

@@ -30,7 +30,8 @@ import {
 } from "../models/tasksBlocks.js";
 import Task from "../models/task.js"
 import {
-    addCard, renderNameOfUser
+    addCard,
+    renderNameOfUser
 } from "./utilsForUsers.js";
 import {
     renderUserPage
@@ -60,12 +61,19 @@ import {
     createAdminUser
 } from "../app.js";
 import {
+    DragAndDrop,
     dragAndDrop
 } from "./draganddrop.js";
-import { Footer } from "../models/footer.js";
+import {
+    Footer
+} from "../models/footer.js";
+import {
+    UserPage
+} from "../models/userPage.js";
 
+import userPage from "../templates/taskField.html"
 
-
+export let userPageObject
 
 
 
@@ -77,14 +85,19 @@ import { Footer } from "../models/footer.js";
 
 
 export function userLoader() {
+    document.querySelector('#global__content').innerHTML = userPage;
+    
+    let kanban = document.getElementsByClassName('kanban')[0]
+    userPageObject = new UserPage(appState.currentUser, 0, kanban)
+    userPageObject.renderUserPage()
+    userPageObject.createTasksBlocks(appState.currentUser)
+    // renderUserPage()
+    // createTasksBlocks(appState.currentUser);
+    const dragAndDrop = new DragAndDrop(userPageObject)
+    dragAndDrop.startDragAndDrop()
 
-    renderUserPage()
-    createTasksBlocks(appState.currentUser);
-    dragAndDrop()
-    const btnOut = document.getElementById('admin__btn');
-
-    const kanbanContent = document.getElementById('kanban__content')
-    kanbanContent.addEventListener('change', dragAndDrop)  //загружает функционал драг энд дропа
+    
+    // userPageObject.content.addEventListener('change', dragAndDrop) //загружает функционал драг энд дропа
 
     // renderNameOfUser(appState, 'user__name')
     // btnOut.addEventListener('click', () => {
