@@ -8,6 +8,7 @@ import {
 import { loadMainPage } from "./mainPage/mainPage";
 import { BtnOut } from "./models/btnOut";
 import { userLoader } from "./userPage/userLoader";
+import { User } from "./models/User";
 
 export const getFromStorage = function (key) {
   return JSON.parse(localStorage.getItem(key) || "[]");
