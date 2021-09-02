@@ -1,6 +1,3 @@
-import {
-    appState
-} from "../app";
 import index from "../index.html"
 import {
     addCurrentUser
@@ -12,18 +9,7 @@ import {startApp} from "../app.js"
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-export let mainPage = `
+const mainPage = `
 <body class="bg-light ">
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -68,17 +54,11 @@ export function loadMainPage(app) {
         const formData = new FormData(loginForm);
         const login = formData.get("login");
         const password = formData.get("password");
-        // window.alert('loginForm.addEventListener');
-        //loadUsersAccount(login, password); //загружает HTML по введенным данным пользователя если auth = true
-        addCurrentUser(login, password);
         
+        addCurrentUser(login, password);
         changeState(); //меняет состояние на текущий пользователь, если он существует
-       
         startApp();
-        //  state();       // включает логику приложения в зависимости от Состояния
-        //adminUserBtn(appState.currentUser); 
-
-        //   adminBtnOut(); //слушатель кнопки выхода из admin-аккаунта
+      
 
     });
 }

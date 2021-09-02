@@ -22,7 +22,6 @@ export class Footer {
     }
 
     footerContent() {
-
         if (appState.currentUser) {
             if (this.currentUser()) {
 

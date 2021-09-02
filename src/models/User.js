@@ -3,8 +3,7 @@ import {
 } from "./BaseModel";
 import {
   getFromStorage,
-  addToStorage,
-  changeState
+  addToStorage
 } from "../utils";
 
 export class User extends BaseModel {
@@ -30,20 +29,6 @@ export class User extends BaseModel {
 
     return access;
   }
-
-  // changeDropDownFlag() {
-  //   if (!this.dropDownFlag) {
-  //     this.dropDownFlag = true;
-
-  //   } else {
-  //     this.dropDownFlag = true;
-
-  //   }
-  //   this.storageKey = "currentUser"
-  //   this.save(this)
-  //   this.storageKey = "users"
-  //   changeState();
-  // }
 
 
   static save(user) {

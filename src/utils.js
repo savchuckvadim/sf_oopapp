@@ -1,13 +1,14 @@
+import { loadAdminPage } from "./adminPage/adminPageLoader";
 import {
-  app,
-  pageLoader,
-  users
+  users,
+  appState,
+  startApp
 } from "./app";
-import {
-  appState
-} from "./app";
-// localStorage.removeItem('currentUser')
-// localStorage.removeItem('users')
+
+import { loadMainPage } from "./mainPage/mainPage";
+import { BtnOut } from "./models/btnOut";
+import { userLoader } from "./userPage/userLoader";
+
 export const getFromStorage = function (key) {
   return JSON.parse(localStorage.getItem(key) || "[]");
 };
@@ -23,9 +24,8 @@ export const addToStorageCurrentUser = function (obj, key) { // Добавляю
   localStorage.removeItem('currentUser');
   const storageDataCurrentUser = getFromStorage(key);
   storageDataCurrentUser.push(obj);
-  //window.alert('addToStorageCurrentUser'+ obj);                                     //TODO 
   return localStorage.setItem(key, JSON.stringify(storageDataCurrentUser));
-  // var currentUserData = localStorage.setItem(key, JSON.stringify(storageDataCurrentUser));
+  
 };
 
 export const generateTestUser = function (User) {
@@ -38,7 +38,7 @@ export const generateUser = function (User, login, password) {
   const user = new User(login, password);
   User.save(user);
 }
-//создаём функцию создания админа
+
 export const generateAdminUser = function (User) {
 
   const adminUser = new User("admin", "admin");
@@ -71,16 +71,12 @@ export function changeCurrentUserInLocalStorage(user, value){ //изменени
 
 export function changeState() { // изменяет состояние в зависимости от того есть ли текущий пользователь
   const currentUser = getFromStorage('currentUser'); //берет текущего пользователя из localStorage
-  //  window.alert(currentUser[0]);
-  console.log(currentUser)
+  
   if (currentUser.length != 0) { // если длина массива текущих пользователей не равно 0, т.е существует
-// let dropDownFlag = currentUser[0].dropDownFlag
     appState.currentUser = currentUser[0]; //вызывает сэттер состояния и вкладывает в appState currentUser
-    // appState.currentUser.dropDownFlag = dropDownFlag;
-
   }
   else{
-  // из-за этого всё ломается, но возможно это правильно
+  
     appState.currentUser = null; //иначе в состоянии устанавливает текущего пользователя равного null
   }
   
@@ -88,17 +84,51 @@ export function changeState() { // изменяет состояние в зав
 }
 
 
+export function createAdminUser() { //должна запускаться если !appState.currentUser ?
 
-// export function out() {
-//   localStorage.removeItem('currentUser');
-//   changeState();
-//   startApp();
-  
-// }
-// export function btnOut(parentElement) {
-//   const btnOut = document.createElement('input');
-//   btnOut.setAttribute('type', 'button');
-//   btnOut.className = `${parentElement.className}__btnOut `
+  if (appState.currentUser) { //если в стэйте есть currentUser
+    // console.log(users)
+    if (appState.currentUser.login == 'admin') { // если его логин равен админ
+      return
+    }
+  } else { //если в стэйте нет текущего пользователя
+    if (users.length > 0) { //если в users.localStorage есть хоть что-то
+      if (searchUserInLocalStorage('admin', 'admin')) { //находит в users.localStorage админа 
+        return
+      } else { //если в users.localStorage нет админа
+        generateAdminUser(User); //генерит админа    
+        return
+      }
+    } else { //если в users.localStorage ничего нет
+      generateAdminUser(User); //генерит админа
+      return
+    }
+  }
+}  
+
+function searchUserInLocalStorage(login, password) { //проверяет есть ли в users.localStorage пользователь с передаваемыми логином и паролем
+
+  return (users.some(obj => obj.login == login && obj.password == password))
+}
 
 
-// }
+
+
+export function pageLoader() {
+  if (appState.currentUser) {
+    if (appState.currentUser.login == 'admin' && appState.currentUser.password == 'admin') {
+      //загрузка страницы админа
+      loadAdminPage()
+      const btnOut = new BtnOut()
+      btnOut.outElementContent()
+    } else {
+      // загрузка страницы пользователя
+      userLoader();
+      const btnOut = new BtnOut()
+      btnOut.outElementContent()
+    }
+  } else {
+    loadMainPage(startApp)
+  }
+
+}

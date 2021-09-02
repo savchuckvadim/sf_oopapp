@@ -8,9 +8,7 @@ import {
 import {
     getFromStorage
 } from "../utils";
-import {
-    appState
-} from "../app";
+
 
 export class UserPage {
     constructor(appStateCurrentUser, number, kanban) {
@@ -28,28 +26,19 @@ export class UserPage {
         this.userName = appStateCurrentUser.login
         this.htmlUserName
         this.number = number
-
         this.kanban = kanban
-        // this.kanban = document.getElementsByClassName('kanban')[0]
 
-        // this.parrentElement =
     }
 
-    //TODO
-    //отрисовка задач из localStorage по user ID
-    //функционал dragAndDrop
-    //set сохранение задач в LocalStorage и в this.tasksBlocks и пересчет и вставка в нижнее меню итоговых значений с учетом того, что при загрузке из adminPage пересчитываться будет по другому - в зависимости от state например
-    //отрисовка всего UserPage и вставление в нужный Html - передавать Html в конструкторе и апендить в него
-    //get - получение задач текущего пользователя из localStorage
+
     createTasksBlocks(appStateCurrentUser) {
-        
         this.kanban.appendChild(this.content)
 
         this.statusNames.forEach((element, index) => {
-
             this.tasksBlocks[index] = new Tasks(element, index, this)
             this.tasksBlocks[index].renderTasks()
         });
+
         this.renderRelevantTasks(appStateCurrentUser)
     }
 
@@ -77,20 +66,13 @@ export class UserPage {
                 this.createAndDeleteTask(allRelevantTasksOfCurrentUser[i], this.tasksBlocks[2])
             }
         }
-        //TODO - после создания и отрисовки задач - надо актуализировать данные
-        //в localStorage - в данном случае не надо, так как все изначально с него взялось и отрисовалось
-        //на данный момент уже создался массив this.tasksBlocks
-        // и НЕ создался массив this.allTasks - надо засунуть в него новые данные
-        //из tasksBlocks
-         footer.footerContent() //отрисовка footera с данными по задачам из localStorage
+        footer.footerContent() //отрисовка footera с данными по задачам из localStorage
     }
+
     createAndDeleteTask(oldTask, otherBlock) {
         otherBlock.createTask(oldTask.id)
         let thisTask = otherBlock.tasks[otherBlock.tasks.length - 1];
         otherBlock.renderTransitionTask(oldTask, thisTask);
-
-
-
         otherBlock.addCardDisplay();
         if (oldTask.div) oldTask.deleteTask();
         thisTask.saveTask()
@@ -102,16 +84,12 @@ export class UserPage {
 
 
     renderUserPage() {
-        // if (currentUser()) {
-       
         this.htmlUserName = document.getElementsByClassName('user__name')[0]
         this.htmlUserName.textContent = `${this.userName}`
-        // }
 
     }
 
     addCard(status) {
-
         if (status == 'Ready') {
             this.tasksBlocks[0].addCardDisplay();
         } else if (status == 'InProgress') {
@@ -126,9 +104,8 @@ export class UserPage {
         this.tasksBlocks[0].inputP();
     }
 
-    
 
-    currentUser() {
+    currentUser() { //проверяет текущий пользователь админ или нет
         if (this.appStateCurrentUser) {
             if (this.appStateCurrentUser.login == 'admin' && this.appStateCurrentUser.password == 'admin') {
                 return true
