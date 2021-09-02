@@ -8,6 +8,7 @@ import "./styles/style.css";
 import taskFieldTemplate from "./templates/taskField.html";
 import noAccessTemplate from "./templates/noAccess.html";
 import admin from "./templates/admin.html"; //html админа
+import { User } from "./models/User";
 
 import {
   changeState,
