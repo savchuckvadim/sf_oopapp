@@ -17,9 +17,10 @@ export function userLoader() {
     userPageObject = new UserPage(appState.currentUser, 0, kanban)
     userPageObject.renderUserPage()
     userPageObject.createTasksBlocks(appState.currentUser)
+    // userPageObject.clicky()
    
-    const dragAndDrop = new DragAndDrop(userPageObject)
-    dragAndDrop.startDragAndDrop()
+    // const dragAndDrop = new DragAndDrop(userPageObject)
+    // dragAndDrop.startDragAndDrop()
 
 }
 

@@ -155,8 +155,8 @@ export class AdminPage {
             this.userPages[index] = new UserPage(element, index, tasksMenu)
 
             this.userPages[index].createTasksBlocks(element)
-            const dragAndDrop = new DragAndDrop(this.userPages[index])
-            dragAndDrop.startDragAndDrop()
+            // const dragAndDrop = new DragAndDrop(this.userPages[index])
+            // dragAndDrop.startDragAndDrop()
         })
 
 

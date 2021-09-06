@@ -1,7 +1,5 @@
-import { handlerDragEnd, handlerDragStart, draggedItem, droppedItem } from "../userPage/draganddrop.js";
 import { addToStorage, getFromStorage } from "../utils.js";
 import { BaseModel } from "./BaseModel.js";
-import Sortable from 'sortablejs';
 
 export class Task extends BaseModel {
 
@@ -39,10 +37,10 @@ export class Task extends BaseModel {
         this.divSubmits.style.display = 'none'
 
         
-        // this.div.className = `dragItem dragItem--${this.userId}`
+        this.div.className = `dragItem dragItem--${this.userId}`
         this.div.draggable = true;
-        // this.form.draggable = true;
-        // this.input.draggable = true;
+        this.form.draggable = true;
+        this.input.draggable = true;
 
         
     }
@@ -59,38 +57,6 @@ export class Task extends BaseModel {
         this.divSubmits.appendChild(this.submit);
         this.divSubmits.appendChild(this.submitDelete);
 
-
-        // var sortable = Sortable.create(this.div);
-//////////////////////dragAndDrop functions
-
-
-
-
-
-
-
-
-
-        // this.div.addEventListener("dragstart", (e) => {
-        //     handlerDragStart(e, this.div)
-        // });
-        // this.div.addEventListener("dragEnd", (e) => {
-        //     handlerDragEnd(e, this.div)
-        // });
-        // // this.div.addEventListener("drag", handlerDrag);
-
-        // this.div.addEventListener('dragenter', (e) => {
-
-        //     if (draggedItem !== droppedItem) {
-        //         droppedItem = this.div;
-        //     }
-
-        // })
-        // this.div.addEventListener('dragleave', (e) => {
-        //     droppedItem = null;
-        // })
-       
-//////////////////////////////////////////////////////////////////////    
 
         this.input.addEventListener('focusin', () => {
             this.divSubmits.style.display = 'flex';

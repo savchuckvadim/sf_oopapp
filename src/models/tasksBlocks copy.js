@@ -4,13 +4,7 @@ import {
 import {
     startApp
 } from '../app.js';
-import {
-    handlerDragEnter,
-    handlerDragleave,
-    handlerDragover,
-    handlerDrop
-} from '../userPage/draganddrop.js';
-import {Sortable} from 'sortablejs';
+
 
 
 
@@ -60,58 +54,6 @@ export class Tasks {
         this.div.className = `kanban__block kanban__${this.status} col-md-${divWidth} d-flex justify-content-start flex-column`
         this.div.id = `kanban__${this.status}`
 
-       
-        this.sortable = Sortable.create(this.tasksCardsDiv, {
-            group: `tasks-sortable`,
-            sort: true,
-            animation: 150,
-            dataIdAttr: 'data-id',
-            ghostClass: 'ghost',
-
-            store: {
-                /**
-                 * Get the order of elements. Called once during initialization.
-                 * @param   {Sortable}  sortable
-                 * @returns {Array}
-                 */
-                get: function (sortable) {
-                    var order = localStorage.getItem(sortable.options.group.name);
-                    return order ? order.split('|') : [];
-                },
-
-                /**
-                 * Save the order of elements. Called onEnd (when the item is dropped).
-                 * @param {Sortable}  sortable
-                 */
-                set: function (sortable) {
-                    var order = sortable.toArray();
-                    localStorage.setItem(sortable.options.group.name, order.join('|'));
-                },
-            },
-            onSort: function (evt) {
-                var itemEl = evt.item
-                console.log(evt.oldIndex)
-                console.log(evt.newIndex)
-                 let dataTransfer = new DataTransfer()
-                // console.log(evt.dataTransfer.getData)
-                // this.sortable.setData(dataTransfer, evt.item.dataIdAttr)
-                // console.log(this.setData)
-                // this.sortable.options.store.set()
-                // те же свойства, что и onEnd 
-                
-                // console.log(this.options.setData)
-                this.options.setData(dataTransfer, evt.item)
-            },
-            setData: function (dataTransfer, dragEl) {
-                dataTransfer.setData('text', dragEl.textContent); // объект `dataTransfer` HTML5 DragEvent 
-            }
-
-        });
-        
-
-        var order = this.sortable.toArray();
-        this.sortable.sort(order.reverse(), true); // apply
-
         this.kanbanContent.appendChild(this.div)
 
         this.dropDown = document.createElement('select');
@@ -134,53 +76,6 @@ export class Tasks {
             this.div.appendChild(this.submitAddCard);
             this.div.appendChild(this.dropDown);
             this.addTask();
-
-            // var sortable = Sortable.create(this.tasksCardsDiv, {
-            //     group: `tasks-sortable`,
-            //     sort: true,
-            //     animation: 150,
-            //     dataIdAttr: 'data-id',
-            //     ghostClass: 'ghost',
-            //     store: {
-            //         /**
-            //          * Get the order of elements. Called once during initialization.
-            //          * @param   {Sortable}  sortable
-            //          * @returns {Array}
-            //          */
-            //         get: function (sortable) {
-            //             var order = localStorage.getItem(sortable.options.group.name);
-            //             return order ? order.split('|') : [];
-            //         },
-
-            //         /**
-            //          * Save the order of elements. Called onEnd (when the item is dropped).
-            //          * @param {Sortable}  sortable
-            //          */
-            //         set: function (sortable) {
-            //             var order = sortable.toArray();
-            //             localStorage.setItem(sortable.options.group.name, order.join('|'));
-            //         },
-
-            //     }
-            // });
-
-            // let order = sortable.options.store.get(sortable)
-            //  order = sortable.options.store.set(sortable)
-            // console.log(order)
-            // console.log(order)
-
-            // this.tasksCardsDiv.addEventListener("dragenter", (e) => {
-            //     handlerDragEnter(e, this.tasksCardsDiv)
-            // });
-            // this.tasksCardsDiv.addEventListener("dragleave", (e) => {
-            //     handlerDragleave(e, this.tasksCardsDiv)
-            // });
-            // this.tasksCardsDiv.addEventListener("dragover", (e) => {
-            //     handlerDragover(e)
-            // });
-            // this.tasksCardsDiv.addEventListener("drop", (e) => {
-            //     handlerDrop(e, this.tasksCardsDiv)
-            // });
         }
     };
 
@@ -214,19 +109,19 @@ export class Tasks {
     }
 
     renderCreatedTask() {
-        this.tasks[this.tasks.length - 1].renderTask(this.tasksCardsDiv); //берет последнюю задачу из собственного массива задач и запускает в ней функцию renderTask
+        this.tasks[this.tasks.length - 1].renderTask(this.tasksCardsDiv);  //берет последнюю задачу из собственного массива задач и запускает в ней функцию renderTask
     }
 
-    renderTransitionTask(oldTask, newTask) { //принимает oldTask - задачу с которой нужно перерисовать и newTask - новую задачу в которую нужно перерисовать старую задачу - используется при переносе задаче методом выпадающего списка
+    renderTransitionTask(oldTask, newTask) {                               //принимает oldTask - задачу с которой нужно перерисовать и newTask - новую задачу в которую нужно перерисовать старую задачу - используется при переносе задаче методом выпадающего списка
         this.tasksCardsDiv.appendChild(newTask.div) //в див для задач вставляет div задачи - newTask
-        newTask.taskValue(oldTask.value) //вставляет значение задачи из старой в новую
-        newTask.setUserId(oldTask.userId) //вставляет значение userId задачи из старой в новую
-        newTask.number = this.tasks.length - 1 //присаивает номер задачи
-        newTask.status = this.status //присваеивает статус задачи
-        newTask.renderTask(this.tasksCardsDiv) // в новой подготовленной задаче запускает метод, который отрисовывает задачу в нужном диве и назначает всех слушателей для данной задачи
+        newTask.taskValue(oldTask.value)            //вставляет значение задачи из старой в новую
+        newTask.setUserId(oldTask.userId)            //вставляет значение userId задачи из старой в новую
+        newTask.number = this.tasks.length - 1       //присаивает номер задачи
+        newTask.status = this.status                 //присваеивает статус задачи
+        newTask.renderTask(this.tasksCardsDiv)       // в новой подготовленной задаче запускает метод, который отрисовывает задачу в нужном диве и назначает всех слушателей для данной задачи
 
-        let event = new Event("click");
-        newTask.p.dispatchEvent(event); //имитирует нажатие на p и кнопку отправки задачи для приведения задачи в нетронутый вид
+        let event = new Event("click");   
+        newTask.p.dispatchEvent(event);               //имитирует нажатие на p и кнопку отправки задачи для приведения задачи в нетронутый вид
         newTask.submit.dispatchEvent(event);
         //this.counter++ -----???
     }
@@ -270,16 +165,16 @@ export class Tasks {
         })
 
         let allOptions = document.querySelectorAll('.option'); //все созданные элементы
-        this.dropDown.addEventListener('change', (e) => { //слушает событие изменения дропдауна
-            e.preventDefault() //прерывает событие
+        this.dropDown.addEventListener('change', (e) => {      //слушает событие изменения дропдауна
+            e.preventDefault()                                 //прерывает событие
             if (!this.dropDownFlag) {
-
+                
                 this.dropDownFlag = true
                 let foundTask
                 for (let i = 0; i < allOptions.length; i++) {
                     if (allOptions[i].selected) { //находит отмеченный option
-                        foundTask = draggingFromBlock.tasks[i] //искомая задача получается та индекс которой равен i в массиве задач блока задач draggingFromBlock  - её нужно пересоздать, удалить и отрисовать
-                        ////////////////////////////////////////////////////////////////Problem - на первый раз нормально находит foundTask - со второго раза находит undedinde : поставил в конце функции перезапуск приложения startApp() и заработало нормально
+                        foundTask = draggingFromBlock.tasks[i]        //искомая задача получается та индекс которой равен i в массиве задач блока задач draggingFromBlock  - её нужно пересоздать, удалить и отрисовать
+////////////////////////////////////////////////////////////////Problem - на первый раз нормально находит foundTask - со второго раза находит undedinde : поставил в конце функции перезапуск приложения startApp() и заработало нормально
                     }
                 }
                 this.userPage.createAndDeleteTask(foundTask, this.userPage.tasksBlocks[this.dataZoneNumber])

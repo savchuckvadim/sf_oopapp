@@ -4,6 +4,7 @@ import {
   Toast,
   Popover
 } from 'bootstrap'
+import Sortable from 'sortablejs';
 import "./styles/style.css";
 import taskFieldTemplate from "./templates/taskField.html";
 import noAccessTemplate from "./templates/noAccess.html";

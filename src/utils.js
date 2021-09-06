@@ -110,7 +110,6 @@ export function createAdminUser() { //должна запускаться есл
 }  
 
 function searchUserInLocalStorage(login, password) { //проверяет есть ли в users.localStorage пользователь с передаваемыми логином и паролем
-console.log((users.some(obj => obj.login == login && obj.password == password)))
   return (users.some(obj => obj.login == login && obj.password == password))
 }
 

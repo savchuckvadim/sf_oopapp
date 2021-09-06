@@ -105,6 +105,14 @@ export class UserPage {
     }
 
 
+    clicky() {
+        document.addEventListener('change', () => {
+            this.tasksBlocks.forEach((element) => {
+                
+            })
+        })
+    }
+
     currentUser() { //проверяет текущий пользователь админ или нет
         if (this.appStateCurrentUser) {
             if (this.appStateCurrentUser.login == 'admin' && this.appStateCurrentUser.password == 'admin') {
