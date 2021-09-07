@@ -102,22 +102,27 @@ export class Tasks {
                     if (element.getAttribute('data-item')) {
                         element.setAttribute('data-item', counter)
                         counter++
+                        console.log(element)
                     }
                 })
+                
                 counter = 0
+                console.log(evt.to)
                 if (evt.to > 0) {
                     evt.to.forEach((element) => {
                         if (element.getAttribute('data-item')) {
                             element.setAttribute('data-item', counter)
                             counter++
+                            console.log(element)
                         }
                         counter = 0
                     })
                 }
+                console.log(evt.to)
                 //привели все data-item к правильным значениям
 
                 userPageObject.tasksBlocks.forEach((element) => { //перебираем все объекты блоков с задачами
-//TODO - активировать FOOTER для актуализации данных в футере при перетаскивании
+                                                                                        //TODO - активировать FOOTER для актуализации данных в футере при перетаскивании
                     element.tasks.forEach((el) => { //перебираем все задачи
                         if (el.div.parentElement.getAttribute('data-zone') != el.block().dataZoneNumber) { //если в объекте задачи у родительского элемента дива data-zone не равен номеру data-zone-у блока, в котором находится объект задачи 
                             console.log(evt.newIndex)
@@ -130,18 +135,20 @@ export class Tasks {
                         }
                     })
                 })
+               
 //TODO актуализация номеров/data-itemов/tasks.localStorage при:
 //1)при перетаскивании вдругой вдругой блок: порядок задач меняется
 //2)при перетаскивании в рамках одного блока - изменение порядка задач                
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                let dataTransfer = new DataTransfer;
-                this.options.setData(dataTransfer, evt.item)
+                // let dataTransfer = new DataTransfer;
+                // this.options.setData(dataTransfer, evt.item)
+                // console.log(dataTransfer)
                 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             },
-            setData: function (dataTransfer, dragEl) {
-                dataTransfer.setData('text', dragEl.textContent); // объект `dataTransfer` HTML5 DragEvent 
-                console.log(dataTransfer)
-            }
+            // setData: function (dataTransfer, dragEl) {
+            //     dataTransfer.setData('text', dragEl.textContent); // объект `dataTransfer` HTML5 DragEvent 
+            //     // console.log(dataTransfer)
+            // }
         });
 
         this.kanbanContent.appendChild(this.div)
@@ -194,6 +201,9 @@ export class Tasks {
 
     renderCreatedTask() {
         this.tasks[this.tasks.length - 1].renderTask(this.tasksCardsDiv); //берет последнюю задачу из собственного массива задач и запускает в ней функцию renderTask
+        let inputEvent = new Event("focusin");
+        this.tasks[this.tasks.length - 1].input.dispatchEvent(inputEvent);
+        
     }
 
     renderTransitionTask(oldTask, newTask) { //принимает oldTask - задачу с которой нужно перерисовать и newTask - новую задачу в которую нужно перерисовать старую задачу - используется при переносе задаче методом выпадающего списка
