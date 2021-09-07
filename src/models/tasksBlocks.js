@@ -120,6 +120,8 @@ export class Tasks {
 //TODO - активировать FOOTER для актуализации данных в футере при перетаскивании
                     element.tasks.forEach((el) => { //перебираем все задачи
                         if (el.div.parentElement.getAttribute('data-zone') != el.block().dataZoneNumber) { //если в объекте задачи у родительского элемента дива data-zone не равен номеру data-zone-у блока, в котором находится объект задачи 
+                            console.log(evt.newIndex)
+                            el.div.setAttribute('data-item', evt.newIndex)
                             el.number = evt.newIndex; //то номеру задачи присваивается значение индекса перетаскиваемого элемента
                             el.status = userPageObject.tasksBlocks[evt.to.getAttribute('data-zone')].status //и статусу задачи присваивается значение статуса блокаЗадач, который находим значению data-zone списка(дива), в который задача была перенесена
                             el.saveTask() //обращаемся к методу найденной задачи saveTask(), который создает и сохраняет специальный объект задачи в localStorage - находит в localStorage задачу по ID задачи - и перезаписывает внее новые данные
@@ -128,6 +130,9 @@ export class Tasks {
                         }
                     })
                 })
+//TODO актуализация номеров/data-itemов/tasks.localStorage при:
+//1)при перетаскивании вдругой вдругой блок: порядок задач меняется
+//2)при перетаскивании в рамках одного блока - изменение порядка задач                
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 let dataTransfer = new DataTransfer;
                 this.options.setData(dataTransfer, evt.item)

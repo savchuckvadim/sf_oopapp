@@ -57,6 +57,7 @@ export class UserPage {
             }
 
         })
+        /////////////////////////////отрисовывает в том порядке в котором они находятся в массиве, а надо - в том порядке в котором пронумерованы
         for (let i = 0; i < allRelevantTasksOfCurrentUser.length; i++) { //перебирает все отсортированные по пользователю задачи
             if (allRelevantTasksOfCurrentUser[i].status == this.tasksBlocks[0].status) { //сортирует задачи по статусам, и в зависимости от статуса запускает процес создания/отрисовывания задач через соответсвующий статусу задачи taskblocks
                 this.createAndDeleteTask(allRelevantTasksOfCurrentUser[i], this.tasksBlocks[0])
