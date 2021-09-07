@@ -197,8 +197,7 @@ export class Task extends BaseModel {
         let block
         this.userPage.tasksBlocks.forEach((element) => {
             if (element.status == this.status){
-                block = element
-                
+                block = element 
             }
         })
         return block

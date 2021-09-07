@@ -10,7 +10,9 @@ import {
     handlerDragover,
     handlerDrop
 } from '../userPage/draganddrop.js';
-import {Sortable} from 'sortablejs';
+import {
+    Sortable
+} from 'sortablejs';
 
 
 
@@ -60,7 +62,7 @@ export class Tasks {
         this.div.className = `kanban__block kanban__${this.status} col-md-${divWidth} d-flex justify-content-start flex-column`
         this.div.id = `kanban__${this.status}`
 
-       
+
         this.sortable = Sortable.create(this.tasksCardsDiv, {
             group: `tasks-sortable`,
             sort: true,
@@ -76,6 +78,7 @@ export class Tasks {
                  */
                 get: function (sortable) {
                     var order = localStorage.getItem(sortable.options.group.name);
+
                     return order ? order.split('|') : [];
                 },
 
@@ -88,44 +91,60 @@ export class Tasks {
                     localStorage.setItem(sortable.options.group.name, order.join('|'));
                 },
             },
+
             onSort: function (evt) {
-                var itemEl = evt.item
-                console.log(evt.oldIndex)
-                console.log(evt.newIndex)
-                 let dataTransfer = new DataTransfer()
-                // console.log(evt.dataTransfer.getData)
-                // this.sortable.setData(dataTransfer, evt.item.dataIdAttr)
-                // console.log(this.setData)
-                // this.sortable.options.store.set()
-                // те же свойства, что и onEnd 
-                
-                // console.log(this.options.setData)
+                evt.item.setAttribute('data-item', evt.newIndex) //вставляем в data-item значение newIndex
+                evt.item.getAttribute('data-item')
+                let counter = 0
+                evt.from.childNodes.forEach((element) => {
+                    //перебираем все дочерние элементы HTMLсписка, из которого перетаскиваем 
+                    // console.log(evt.from.getAttribute('data-zone')) //определяем, что это за список по его data-zone
+                    if (element.getAttribute('data-item')) {
+                        element.setAttribute('data-item', counter)
+                        counter++
+                    }
+                })
+                counter = 0
+                if (evt.to > 0) {
+                    evt.to.forEach((element) => {
+                        if (element.getAttribute('data-item')) {
+                            element.setAttribute('data-item', counter)
+                            counter++
+                        }
+                        counter = 0
+                    })
+                }
+                //привели все data-item к правильным значениям
+
+                userPageObject.tasksBlocks.forEach((element) => { //перебираем все объекты блоков с задачами
+//TODO - активировать FOOTER для актуализации данных в футере при перетаскивании
+                    element.tasks.forEach((el) => { //перебираем все задачи
+                        if (el.div.parentElement.getAttribute('data-zone') != el.block().dataZoneNumber) { //если в объекте задачи у родительского элемента дива data-zone не равен номеру data-zone-у блока, в котором находится объект задачи 
+                            el.number = evt.newIndex; //то номеру задачи присваивается значение индекса перетаскиваемого элемента
+                            el.status = userPageObject.tasksBlocks[evt.to.getAttribute('data-zone')].status //и статусу задачи присваивается значение статуса блокаЗадач, который находим значению data-zone списка(дива), в который задача была перенесена
+                            el.saveTask() //обращаемся к методу найденной задачи saveTask(), который создает и сохраняет специальный объект задачи в localStorage - находит в localStorage задачу по ID задачи - и перезаписывает внее новые данные
+                        } else {
+                            console.log('c[jlbncz')
+                        }
+                    })
+                })
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                let dataTransfer = new DataTransfer;
                 this.options.setData(dataTransfer, evt.item)
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             },
             setData: function (dataTransfer, dragEl) {
                 dataTransfer.setData('text', dragEl.textContent); // объект `dataTransfer` HTML5 DragEvent 
+                console.log(dataTransfer)
             }
-
         });
-        
-
-        var order = this.sortable.toArray();
-        this.sortable.sort(order.reverse(), true); // apply
 
         this.kanbanContent.appendChild(this.div)
-
         this.dropDown = document.createElement('select');
         this.dropDown.className = 'form-select';
         this.dropDown.setAttribute('aria-label', 'Выберите задачу')
-
         this.dropDown.style.display = 'none';
-
-
-
     };
-
-
-
 
     renderTasks() { //отрисовывает div, содержащий все задачи и +addCard
         if (this.div) {
@@ -135,52 +154,7 @@ export class Tasks {
             this.div.appendChild(this.dropDown);
             this.addTask();
 
-            // var sortable = Sortable.create(this.tasksCardsDiv, {
-            //     group: `tasks-sortable`,
-            //     sort: true,
-            //     animation: 150,
-            //     dataIdAttr: 'data-id',
-            //     ghostClass: 'ghost',
-            //     store: {
-            //         /**
-            //          * Get the order of elements. Called once during initialization.
-            //          * @param   {Sortable}  sortable
-            //          * @returns {Array}
-            //          */
-            //         get: function (sortable) {
-            //             var order = localStorage.getItem(sortable.options.group.name);
-            //             return order ? order.split('|') : [];
-            //         },
 
-            //         /**
-            //          * Save the order of elements. Called onEnd (when the item is dropped).
-            //          * @param {Sortable}  sortable
-            //          */
-            //         set: function (sortable) {
-            //             var order = sortable.toArray();
-            //             localStorage.setItem(sortable.options.group.name, order.join('|'));
-            //         },
-
-            //     }
-            // });
-
-            // let order = sortable.options.store.get(sortable)
-            //  order = sortable.options.store.set(sortable)
-            // console.log(order)
-            // console.log(order)
-
-            // this.tasksCardsDiv.addEventListener("dragenter", (e) => {
-            //     handlerDragEnter(e, this.tasksCardsDiv)
-            // });
-            // this.tasksCardsDiv.addEventListener("dragleave", (e) => {
-            //     handlerDragleave(e, this.tasksCardsDiv)
-            // });
-            // this.tasksCardsDiv.addEventListener("dragover", (e) => {
-            //     handlerDragover(e)
-            // });
-            // this.tasksCardsDiv.addEventListener("drop", (e) => {
-            //     handlerDrop(e, this.tasksCardsDiv)
-            // });
         }
     };
 
