@@ -49,16 +49,10 @@ export class Task extends BaseModel {
         this.divSubmits.className = 'divSubmits'
         this.divSubmits.style.display = 'none'
 
-
-        // this.div.className = `dragItem dragItem--${this.userId}`
         this.div.draggable = true;
-        // this.form.draggable = true;
-        // this.input.draggable = true;
-
-
+        this.div.className = 'draggable-item'
+        
     }
-
-
 
 
     renderTask(element) { //element - родительский элемент HTML из блока, в который будет всё вставляться
@@ -176,7 +170,6 @@ export class Task extends BaseModel {
             addToStorage(element, 'tasks')
         })
     }
-
 
 
     transferTask(element) {

@@ -13,6 +13,10 @@ import {
 import {
     Sortable
 } from 'sortablejs';
+import {
+    addToStorage,
+    getFromStorage
+} from '../utils.js';
 
 
 
@@ -49,14 +53,12 @@ export class Tasks {
 
         this.title.innerText = status;
 
-
         this.submitAddCard.type = 'submit';
         this.submitAddCard.id = `${status}__add--button`;
         this.submitAddCard.className = `${status}__add--button`;
         this.submitAddCard.value = "+Add card";
 
         this.flag = false;
-
 
         this.div = document.createElement('div');
         this.div.className = `kanban__block kanban__${this.status} col-md-${divWidth} d-flex justify-content-start flex-column`
@@ -68,6 +70,7 @@ export class Tasks {
             sort: true,
             animation: 150,
             dataIdAttr: 'data-id',
+            selectedClass : " sortable-selected ",
             ghostClass: 'ghost',
 
             store: {
@@ -92,20 +95,18 @@ export class Tasks {
                 },
             },
 
-            onSort: function (evt) {
-                evt.item.setAttribute('data-item', evt.newIndex) //вставляем в data-item значение newIndex
-                evt.item.getAttribute('data-item')
+            onEnd: function (evt) {
                 let counter = 0
+                console.log(evt.from)
                 evt.from.childNodes.forEach((element) => {
                     //перебираем все дочерние элементы HTMLсписка, из которого перетаскиваем 
                     // console.log(evt.from.getAttribute('data-zone')) //определяем, что это за список по его data-zone
                     if (element.getAttribute('data-item')) {
                         element.setAttribute('data-item', counter)
                         counter++
-                        console.log(element)
                     }
                 })
-                
+
                 counter = 0
                 console.log(evt.to)
                 if (evt.to > 0) {
@@ -118,11 +119,34 @@ export class Tasks {
                         counter = 0
                     })
                 }
-                console.log(evt.to)
-                //привели все data-item к правильным значениям
+
+        
+                userPageObject.tasksBlocks.forEach((element) => {
+                    element.tasks.forEach((el, index) => {
+                        el.number = Number(el.div.getAttribute('data-item')) ////Номер задачи в массиве задач актуализируется
+             
+                    })
+                })
+                userPageObject.tasksBlocks.forEach((element) => {
+                    let sortedArray = element.tasks.sort(function (a, b) {
+                        return a.number - b.number; // for ascending order
+                    });
+                })
+
+                userPageObject.tasksBlocks.forEach((element) => {
+                    element.tasks.forEach((el) => {
+                        el.saveTask()
+                    })
+                })
+            },
+ //////////////////////////////////////////работает сортировка внутри списка  
+ /////////////////////////////////////////работает сортировка между списками - если задачу кидаем в конец списка
+ ////////////////////////////////////TODO: сделать запоминание сортировки между списками-междузадачами         
+            onSort: function (evt) {
+               
 
                 userPageObject.tasksBlocks.forEach((element) => { //перебираем все объекты блоков с задачами
-                                                                                        //TODO - активировать FOOTER для актуализации данных в футере при перетаскивании
+                    //TODO - активировать FOOTER для актуализации данных в футере при перетаскивании
                     element.tasks.forEach((el) => { //перебираем все задачи
                         if (el.div.parentElement.getAttribute('data-zone') != el.block().dataZoneNumber) { //если в объекте задачи у родительского элемента дива data-zone не равен номеру data-zone-у блока, в котором находится объект задачи 
                             console.log(evt.newIndex)
@@ -133,22 +157,19 @@ export class Tasks {
                         } else {
                             console.log('c[jlbncz')
                         }
+
                     })
                 })
-               
-//TODO актуализация номеров/data-itemов/tasks.localStorage при:
-//1)при перетаскивании вдругой вдругой блок: порядок задач меняется
-//2)при перетаскивании в рамках одного блока - изменение порядка задач                
+
+                //TODO актуализация номеров/data-itemов/tasks.localStorage при:
+                //1)при перетаскивании вдругой вдругой блок: порядок задач меняется
+                //2)при перетаскивании в рамках одного блока - изменение порядка задач                
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 // let dataTransfer = new DataTransfer;
                 // this.options.setData(dataTransfer, evt.item)
                 // console.log(dataTransfer)
                 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             },
-            // setData: function (dataTransfer, dragEl) {
-            //     dataTransfer.setData('text', dragEl.textContent); // объект `dataTransfer` HTML5 DragEvent 
-            //     // console.log(dataTransfer)
-            // }
         });
 
         this.kanbanContent.appendChild(this.div)
@@ -192,7 +213,7 @@ export class Tasks {
         if (id) {
             task.id = id
         }
-        task.number = task.div.getAttribute('data-item') //присваивает задаче номер соответствующий  её data-item
+        task.number = Number(task.div.getAttribute('data-item')) //присваивает задаче номер соответствующий  её data-item
         task.p.addEventListener('click', () => { ///дизэйбл кнопки "+AddCard"
             this.addCardDisplay();
         })
@@ -203,7 +224,7 @@ export class Tasks {
         this.tasks[this.tasks.length - 1].renderTask(this.tasksCardsDiv); //берет последнюю задачу из собственного массива задач и запускает в ней функцию renderTask
         let inputEvent = new Event("focusin");
         this.tasks[this.tasks.length - 1].input.dispatchEvent(inputEvent);
-        
+
     }
 
     renderTransitionTask(oldTask, newTask) { //принимает oldTask - задачу с которой нужно перерисовать и newTask - новую задачу в которую нужно перерисовать старую задачу - используется при переносе задаче методом выпадающего списка
