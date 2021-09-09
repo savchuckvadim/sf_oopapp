@@ -1,9 +1,4 @@
-import {
-    handlerDragEnd,
-    handlerDragStart,
-    draggedItem,
-    droppedItem
-} from "../userPage/draganddrop.js";
+
 import {
     addToStorage,
     getFromStorage
@@ -11,20 +6,15 @@ import {
 import {
     BaseModel
 } from "./BaseModel.js";
-import Sortable from 'sortablejs';
 
 export class Task extends BaseModel {
-
     constructor(status, number, userPageObject) {
-
         super();
         this.number = number;
         this.status = status;
         this.value = '';
         this.userId = userPageObject.userId
         this.userPage = userPageObject
-
-
         this.form = document.createElement('form'); //создаёт форму задачи
         this.p = document.createElement('p');
         this.input = document.createElement('input');
@@ -33,10 +23,7 @@ export class Task extends BaseModel {
         this.submitDelete = document.createElement('button') //кнопка удаления зазадчи
         this.divSubmits = document.createElement('div');
 
-
-
         this.input.className = 'card';
-
         this.submit.type = 'submit';
         this.submit.style.display = 'none'
         this.submit.className = 'task__add--button btn btn-primary';
@@ -51,12 +38,10 @@ export class Task extends BaseModel {
 
         this.div.draggable = true;
         this.div.className = 'draggable-item'
-
     }
 
 
     renderTask(element) { //element - родительский элемент HTML из блока, в который будет всё вставляться
-
         element.appendChild(this.div);
         this.div.appendChild(this.form);
         this.form.appendChild(this.input);
@@ -91,10 +76,7 @@ export class Task extends BaseModel {
         // если писать через if(event.relatedTarget && event.relatedTarget.type!="click"){ - ругается на замену input на p - говорит что-то инпут больше не родительский элемент
 
         this.input.addEventListener('drag', (event) => {
-
         }, false)
-
-
 
         this.submitDelete.addEventListener('click', (e) => {
             e.preventDefault()
@@ -120,12 +102,8 @@ export class Task extends BaseModel {
                 this.submitDelete.style.display = 'none';
                 this.submit.style.display = 'none'
             })
-
         })
-
     }
-
-
 
     taskValue(value) {
         this.p.innerText = value;
@@ -134,13 +112,10 @@ export class Task extends BaseModel {
         this.saveTask()
     }
 
-
     deleteTask() {
         let block = this.block();
         let tasksFromLocal = getFromStorage('tasks')
-
         block.tasks.splice(this.number, 1)
-
         for (let i = 0; i < tasksFromLocal.length; i++) {
             if (tasksFromLocal[i].id == this.id) {
                 tasksFromLocal.splice(i, 1)
@@ -227,11 +202,9 @@ export class Task extends BaseModel {
             }
 
 
-            // allTasksFromLocalStorage.sort(function (a, b) {
-            //     console.log('sort')
-
-            //     return a.number - b.number; 
-            // });
+            allTasksFromLocalStorage.sort(function (a, b) {
+                return a.number - b.number; 
+            });
             localStorage.removeItem('tasks');
             allTasksFromLocalStorage.forEach((element) => {
                 addToStorage(element, 'tasks')

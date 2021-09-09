@@ -8,7 +8,6 @@ import {
 
 export class BtnOut {
     constructor() {
-
         this.outElement = document.createElement('button')
         this.outElement.addEventListener('click', () => {
             this.outAction()
@@ -51,7 +50,6 @@ export class BtnOut {
     }
 
     outAction() {
-        
         window.alert('До Свидания!')
         localStorage.removeItem('currentUser')
         this.footer.forEach(element => {

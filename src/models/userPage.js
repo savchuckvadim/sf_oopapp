@@ -8,8 +8,6 @@ import {
 import {
     getFromStorage
 } from "../utils";
-
-
 export class UserPage {
     constructor(appStateCurrentUser, number, kanban) {
         this.tasksBlocks = []
@@ -33,7 +31,6 @@ export class UserPage {
 
     createTasksBlocks(appStateCurrentUser) {
         this.kanban.appendChild(this.content)
-
         this.statusNames.forEach((element, index) => {
             this.tasksBlocks[index] = new Tasks(element, index, this)
             this.tasksBlocks[index].renderTasks()
@@ -56,9 +53,8 @@ export class UserPage {
                     allRelevantTasksOfCurrentUser.push(element);
                 }
             }
-
         })
-        /////////////////////////////отрисовывает в том порядке в котором они находятся в массиве, а надо - в том порядке в котором пронумерованы
+        
         for (let i = 0; i < allRelevantTasksOfCurrentUser.length; i++) { //перебирает все отсортированные по пользователю задачи
             if (allRelevantTasksOfCurrentUser[i].status == this.tasksBlocks[0].status) { //сортирует задачи по статусам, и в зависимости от статуса запускает процес создания/отрисовывания задач через соответсвующий статусу задачи taskblocks
                 this.createAndDeleteTask(allRelevantTasksOfCurrentUser[i], this.tasksBlocks[0])
@@ -68,8 +64,8 @@ export class UserPage {
                 this.createAndDeleteTask(allRelevantTasksOfCurrentUser[i], this.tasksBlocks[2])
             }
         }
+
         this.allAddCardDisplay()
-       
         footer.footerContent() //отрисовка footera с данными по задачам из localStorage
     }
 
@@ -78,6 +74,7 @@ export class UserPage {
             element.addCardDisable()
         })
     }
+
     createAndDeleteTask(oldTask, otherBlock) {
         otherBlock.createTask(oldTask.id)
         let thisTask = otherBlock.tasks[otherBlock.tasks.length - 1];
@@ -88,14 +85,11 @@ export class UserPage {
         this.tasksBlocks.forEach((element) => {
             element.actualityDataItem()
         })
-
     }
-
 
     renderUserPage() {
         this.htmlUserName = document.getElementsByClassName('user__name')[0]
         this.htmlUserName.textContent = `${this.userName}`
-
     }
 
     addCard(status) {

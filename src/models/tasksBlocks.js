@@ -5,29 +5,15 @@ import {
     footer,
     startApp
 } from '../app.js';
-import {
-    handlerDragEnter,
-    handlerDragleave,
-    handlerDragover,
-    handlerDrop
-} from '../userPage/draganddrop.js';
+
 import {
     Sortable
 } from 'sortablejs';
-import {
-    addToStorage,
-    getFromStorage
-} from '../utils.js';
-
-
 
 export const statusNames = ['Ready', 'InProgress', 'Finished'];
 const divWidth = Math.round((12 / statusNames.length) - 1);
-
 export class Tasks {
-
     //создаёт div со списком всех задач
-
     constructor(status, dataZoneNumber, userPageObject) {
         this.status = status;
         this.dataZoneNumber = dataZoneNumber;
@@ -43,28 +29,21 @@ export class Tasks {
         this.tasksCardsDiv = document.createElement('div') //dropZone
         this.tasksCardsDiv.className = `dropZone dropZone--${this.usersId} ${status}__task--cards`
         this.tasksCardsDiv.setAttribute('data-zone', this.dataZoneNumber);
-
-
         this.submitAddCard = document.createElement('input')
-
         this.submit = document.createElement('input');
         this.submit.type = 'submit';
         this.submit.className = 'task__add--button btn btn-primary';
         this.submit.value = 'submit';
-
         this.title.innerText = status;
-
         this.submitAddCard.type = 'submit';
         this.submitAddCard.id = `${status}__add--button`;
         this.submitAddCard.className = `${status}__add--button`;
         this.submitAddCard.value = "+Add card";
-
         this.flag = false;
 
         this.div = document.createElement('div');
         this.div.className = `kanban__block kanban__${this.status} col-md-${divWidth} d-flex justify-content-start flex-column`
         this.div.id = `kanban__${this.status}`
-
 
         this.sortable = Sortable.create(this.tasksCardsDiv, {
             group: `tasks-sortable`,
@@ -82,7 +61,6 @@ export class Tasks {
                  */
                 get: function (sortable) {
                     var order = localStorage.getItem(sortable.options.group.name);
-
                     return order ? order.split('|') : [];
                 },
 
@@ -96,13 +74,9 @@ export class Tasks {
                 },
             },
 
-            onEnd: function (evt) {
-                
+            onEnd: function (evt) {   
                 let counter = 0
-                console.log(evt.from)
                 evt.from.childNodes.forEach((element) => {
-                    //перебираем все дочерние элементы HTMLсписка, из которого перетаскиваем 
-                    // console.log(evt.from.getAttribute('data-zone')) //определяем, что это за список по его data-zone
                     if (element.getAttribute('data-item')) {
                         element.setAttribute('data-item', counter)
                         counter++
@@ -110,27 +84,18 @@ export class Tasks {
                 })
 
                 counter = 0
-                console.log(evt.to)
+                
                 if (evt.to > 0) {
                     evt.to.forEach((element) => {
                         if (element.getAttribute('data-item')) {
                             element.setAttribute('data-item', counter)
-                            counter++
-                            console.log(element)
+                            counter++                
                         }
                         counter = 0
                     })
                 }
 
-                if(evt.to != evt.from){
-                    // if(el.status != userPageObject.tasksBlocks[el.div.parentNode.getAttribute('data-zone')].status){
-                    //     console.log()
-                    // }
-                    // el.status = userPageObject.tasksBlocks[el.div.parentNode.getAttribute('data-zone')].status
-                    // console.log(userPageObject.tasksBlocks[el.div.parentNode.getAttribute('data-zone')])
-                    console.log('to != from')
-                    console.log(evt.item)
-                } 
+
         
                 userPageObject.tasksBlocks.forEach((element) => {
                     element.tasks.forEach((el, index) => {
@@ -141,7 +106,7 @@ export class Tasks {
 
                 userPageObject.tasksBlocks.forEach((element) => {
                     let sortedArray = element.tasks.sort(function (a, b) {
-                        return a.number - b.number; // for ascending order
+                        return a.number - b.number; 
                     });
                 })
 
@@ -150,39 +115,20 @@ export class Tasks {
                         el.saveTask()
                     })
                 })
+                footer.footerContent();
             },
- //////////////////////////////////////////работает сортировка внутри списка  
- /////////////////////////////////////////работает сортировка между списками - если задачу кидаем в конец списка
- ////////////////////////////////////TODO: сделать запоминание сортировки между списками-междузадачами         
+ //////////////////////////////////////////работает сортировка при драг энд дропе внутри списка  
+ /////////////////////////////////////////работает сортировка при драг энд дропе между списками - если задачу кидаем в конец списка
+ ////////////////////////////////////TODO: сделать запоминание сортировки при драг энд дропе между списками-междузадачами         
             onSort: function (evt) {
-               
-
                 userPageObject.tasksBlocks.forEach((element) => { //перебираем все объекты блоков с задачами
                     element.tasks.forEach((el) => { //перебираем все задачи
-                        if (el.div.parentElement.getAttribute('data-zone') != el.block().dataZoneNumber) { //если в объекте задачи у родительского элемента дива data-zone не равен номеру data-zone-у блока, в котором находится объект задачи 
-                            console.log(evt.newIndex)
-                            //el.div.setAttribute('data-item', evt.newIndex)
-                           // el.number = evt.newIndex; //то номеру задачи присваивается значение индекса перетаскиваемого элемента
-                            el.status = userPageObject.tasksBlocks[evt.to.getAttribute('data-zone')].status //и статусу задачи присваивается значение статуса блокаЗадач, который находим значению data-zone списка(дива), в который задача была перенесена
-                        //    el.saveTask() //обращаемся к методу найденной задачи saveTask(), который создает и сохраняет специальный объект задачи в localStorage - находит в localStorage задачу по ID задачи - и перезаписывает внее новые данные
-                        //   el.status = userPageObject.tasksBlocks[el.div.parentElement.getAttribute('data-zone')].status //и статусу задачи присваивается значение статуса блокаЗадач, который находим значению data-zone списка(дива), в который задача была перенесена
-
-                        } else {
-                            console.log('c[jlbncz')
+                        if (el.div.parentElement.getAttribute('data-zone') != el.block().dataZoneNumber) { //если в объекте задачи у родительского элемента дива data-zone не равен номеру data-zone-у блока, в котором находится объект задачи    
+                            el.status = userPageObject.tasksBlocks[evt.to.getAttribute('data-zone')].status //и статусу задачи присваивается значение статуса блокаЗадач, который находим значению data-zone списка(дива), в который задача была перенесена                     
+                        } else {                          
                         }
-
                     })
                 })
-
-                //TODO актуализация номеров/data-itemов/tasks.localStorage при:
-                //1)при перетаскивании вдругой вдругой блок: порядок задач меняется
-                //2)при перетаскивании в рамках одного блока - изменение порядка задач                
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                // let dataTransfer = new DataTransfer;
-                // this.options.setData(dataTransfer, evt.item)
-                // console.log(dataTransfer)
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                footer.footerContent();
             },
         });
 
@@ -200,8 +146,6 @@ export class Tasks {
             this.div.appendChild(this.submitAddCard);
             this.div.appendChild(this.dropDown);
             this.addTask();
-
-
         }
     };
 
@@ -216,15 +160,10 @@ export class Tasks {
     }
 
     addCardDisable(){
-        
         if(this.status != 'Ready'){  
-            console.log(this.userPage.tasksBlocks[this.dataZoneNumber - 1].tasks)
             if(this.userPage.tasksBlocks[this.dataZoneNumber - 1].tasks.length < 1){
-                console.log(this.userPage.tasksBlocks[this.dataZoneNumber - 1].tasks.length < 1)
-                console.log('disable')
                 this.submitAddCard.setAttribute('disabled', true)
             }else{
-                console.log('able')
                 this.submitAddCard.removeAttribute('disabled')
             }
         }      
@@ -266,7 +205,6 @@ export class Tasks {
         let event = new Event("click");
         newTask.p.dispatchEvent(event); //имитирует нажатие на p и кнопку отправки задачи для приведения задачи в нетронутый вид
         newTask.submit.dispatchEvent(event);
-        //this.counter++ -----???
     }
 
 
@@ -289,11 +227,9 @@ export class Tasks {
 
     dropDownContent() {
         const draggingFromBlock = this.userPage.tasksBlocks[this.dataZoneNumber - 1]; //блок, из которого будем перемещать задачи
-
         this.dropDown.style.display = 'inline-block'; //включает видимость выпадающего списка
         let firstOption = document.createElement('option'); //создаёт элемент option
         firstOption.setAttribute('selected', 'true') //обозначает его как выбранный
-        // firstOption.className = 'option'
         firstOption.innerText = 'выберите задачу'; //задаёт его значение 'выберите задачу'
         this.dropDown.appendChild(firstOption) //вставляет его в выпадающий список
 
@@ -345,7 +281,6 @@ export class Tasks {
             this.tasks[i].submitDelete.style.display = 'none';
             this.tasks[i].divSubmits.style.display = 'none';
         }
-
     }
 
 

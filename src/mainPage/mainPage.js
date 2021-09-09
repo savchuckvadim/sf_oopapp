@@ -12,7 +12,6 @@ import {startApp} from "../app.js"
 
 const mainPage = `
 <body class="bg-light ">
-
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">SimpleTODO</a>
@@ -40,14 +39,10 @@ const mainPage = `
         <div class="container">
             <p id="content">Please Sign In to see your tasks!</p>
         </div>
-
-
     </body>
 `
 export function loadMainPage(app) {
-
     document.querySelector("#global__content").innerHTML = mainPage; //загружает HTML главной страницы в глобал контент
-
     const loginForm = document.querySelector("#app-login-form");
     loginForm.addEventListener("submit", function (e) { //авторизация
         e.preventDefault();
@@ -62,7 +57,5 @@ export function loadMainPage(app) {
         addCurrentUser(login, password);
         changeState(); //меняет состояние на текущий пользователь, если он существует
         startApp();
-      
-
     });
 }

@@ -88,9 +88,7 @@ export class Footer {
                 if (element.status == 'Ready' || element.status == 'InProgress') {
                     counter++
                 }
-
             });
-
         } else {
             tasks.forEach(element => {
                 if (element.userId == appState.currentUser.id) {
@@ -112,7 +110,6 @@ export class Footer {
                 if (element.status == 'Finished') {
                     counter++
                 }
-
             });
 
         } else {
@@ -127,11 +124,13 @@ export class Footer {
 
         return counter
     }
+
     qualityOfRegistrationUsers() {
         const users = getFromStorage('users')
         const quantity = users.length
         return quantity
     }
+
     startFooter() {
         window.addEventListener('load', () => {
             this.footerContent()

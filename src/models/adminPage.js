@@ -1,6 +1,4 @@
-import {
-    loadAdminPage
-} from "../adminPage/adminPageLoader";
+
 import {
     changeCurrentUserInLocalStorage,
     generateUser,
@@ -16,25 +14,16 @@ import {
 import {
     UserPage
 } from "./userPage";
-import {
-    DragAndDrop
-} from "../userPage/draganddrop";
+
+
 
 
 
 export class AdminPage {
     constructor(adminWrapper, dropdown) {
-        //Todo
-        //отрисовка и вставка всех html
-        //слушатели и функции
-        //отрисовка страниц пользователей
-
         this.adminWrapper = adminWrapper
         this.dropDownMenu = dropdown
-
-
         this.userPages = []
-
         this.dropDownUsersBtn = document.createElement('li');
         this.dropDownTasksBtn = document.createElement('li');
         this.dropDownUsersBtn.innerHTML = `
@@ -47,8 +36,6 @@ export class AdminPage {
         <p id="admin__allTasks__btn" class="admin__left__menu__tasks d-flex">Задачи</p>
         </a>
         `
-
-
 
         this.form = document.createElement('form')
         this.form.id = 'admin-form'
@@ -88,10 +75,6 @@ export class AdminPage {
         this.tableBody = document.createElement('tbody')
         this.tableBody.id = 'admin__usersTable__body'
         this.formTable.appendChild(this.tableBody)
-
-        // this.pageFlag = false;
-
-
     }
 
     dropdownContent() {
@@ -105,20 +88,16 @@ export class AdminPage {
         })
         this.dropDownTasksBtn.addEventListener('click', () => {
             this.dropDownTasksBtnAction()
-            changeCurrentUserInLocalStorage(appState.currentUser, true)
-            
-
+            changeCurrentUserInLocalStorage(appState.currentUser, true)   
         })
-
     }
+
     dropdownUserBtnAction() {
-        
         this.createUsersMenu()
-
     }
+
     dropDownTasksBtnAction() {
-        this.createTasksMenu()
-       
+        this.createTasksMenu()  
     }
 
     createUsersMenu() {
@@ -126,17 +105,13 @@ export class AdminPage {
         this.adminWrapper.appendChild(this.form)
         this.adminWrapper.appendChild(this.formTable)
         this.showAllUsers()
-        // const form = document.getElementById('admin-form')
+        
         this.form.addEventListener('submit', (e) => {
             e.preventDefault()
             this.registrationNewUser()
-
             this.showAllUsers();
         })
-
-
         this.pageFlag = false
-
     }
     createTasksMenu() {
         const tasksMenu = document.createElement('div')
@@ -144,26 +119,19 @@ export class AdminPage {
         this.adminWrapper.innerHTML = ''
         this.adminWrapper.appendChild(tasksMenu)
 
-
         let users = getFromStorage('users')
         users.forEach((element, index) => {
             let nameOfUser = []
             nameOfUser[index] = document.createElement('h2')
             nameOfUser[index].innerText = element.login
             tasksMenu.appendChild(nameOfUser[index])
-
             this.userPages[index] = new UserPage(element, index, tasksMenu)
-
             this.userPages[index].createTasksBlocks(element)
-            // const dragAndDrop = new DragAndDrop(this.userPages[index])
-            // dragAndDrop.startDragAndDrop()
         })
-
-
         this.pageFlag = true
     }
-    createTable(number, login, password) {
 
+    createTable(number, login, password) {
         const formTableTr = document.createElement('tr')
         formTableTr.className = 'admin__table__allDataOfUser'
         formTableTr.innerHTML = `
@@ -173,10 +141,7 @@ export class AdminPage {
         <td><input id="admin__registredusers__btn__delete--${number}" class="admin__registredusers__btn__delete btn btn-danger btn-sm col-sm-6 col-md-5 col-lg-4" type="button" value="Удалить"></td>
         `
         this.tableBody.appendChild(formTableTr)
-
-
         const adminDeleteUserBtn = document.getElementById(`admin__registredusers__btn__delete--${number}`);
-
         adminDeleteUserBtn.addEventListener('click', () => {
             window.alert('btn_delete')
             this.deleteUser(number)
@@ -187,7 +152,6 @@ export class AdminPage {
         this.tableBody.innerHTML = ''
         const users = getFromStorage('users')
         const adminDeleteUserBtns = document.getElementsByClassName(`admin__registredusers__btn__delete`);
-
         users.forEach((element, index) => {
             this.createTable(index + 1, element.login, element.password)
             if (element.id == appState.currentUser.id) {
@@ -202,31 +166,23 @@ export class AdminPage {
         users.splice([number - 1], 1)
         localStorage.removeItem('users')
         localStorage.setItem('users', JSON.stringify(users))
-
-        // const adminTableBody = document.getElementById('admin__usersTable__body')
-        // this.formTable.remove()
-
         this.showAllUsers()
     }
 
     registrationNewUser() {
-
         const formData = new FormData(this.form);
         const login = formData.get("login");
         const password = formData.get("password");
-
         const inputLogin = document.querySelector('#admin__form__input__login')
         const inputPassword = document.querySelector('#admin__form__input__password')
 
         if (this.existUser(login, password) == false) { //если пользователя несуществует
-
             generateUser(User, login, password);
         }
-
         inputLogin.value = ''
         inputPassword.value = ''
-
     }
+
     existUser(login, password) { // проверяет существует ли пользователь в users.localStorage
         let existUser = false;
         let users = getFromStorage('users');

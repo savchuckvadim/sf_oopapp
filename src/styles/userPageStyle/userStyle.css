@@ -147,5 +147,8 @@ header {
     background-color: rgb(220, 228, 233);
     border-width: 0.1em;
     border-style: dotted;
+    padding-top: 1vh;
+    padding-left: 1vh;
+    height: 10vh;
 
 }

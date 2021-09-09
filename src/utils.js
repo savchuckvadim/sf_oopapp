@@ -21,7 +21,6 @@ export const addToStorage = function (obj, key) {
 };
 
 export const addToStorageCurrentUser = function (obj, key) { // Добавляю функцию добавления в Localstorage - текущего пользователя
-
   localStorage.removeItem('currentUser');
   const storageDataCurrentUser = getFromStorage(key);
   storageDataCurrentUser.push(obj);
@@ -41,10 +40,8 @@ export const generateUser = function (User, login, password) {
 }
 
 export const generateAdminUser = function (User) {
-
   const adminUser = new User("admin", "admin");
   User.save(adminUser); //addToStorage
-
 };
 
 
@@ -53,12 +50,9 @@ export const generateAdminUser = function (User) {
 export const addCurrentUser = (login, password) => { // функция создания в localstorage текущего пользователя
 let users = getFromStorage('users');
   users.forEach(element => { //перебирает всех users по логину если находит среди 
-    // их логинов переданный логин - вставляет в localstorage currentUser - этого юзера, он становится текущим
-    
-    if (element.login == login && element.password == password) {
-     
+    // их логинов переданный логин - вставляет в localstorage currentUser - этого юзера, он становится текущим  
+    if (element.login == login && element.password == password) { 
       addToStorageCurrentUser(element, 'currentUser');
-
     }
   });
 
@@ -88,9 +82,7 @@ export function changeState() { // изменяет состояние в зав
 
 
 export function createAdminUser() { //должна запускаться если !appState.currentUser ?
-
   if (appState.currentUser) { //если в стэйте есть currentUser
-    // console.log(users)
     if (appState.currentUser.login == 'admin') { // если его логин равен админ
       return
     }
