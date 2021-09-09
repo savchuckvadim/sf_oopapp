@@ -2,6 +2,7 @@ import {
     Task
 } from './task.js';
 import {
+    footer,
     startApp
 } from '../app.js';
 import {
@@ -96,6 +97,7 @@ export class Tasks {
             },
 
             onEnd: function (evt) {
+                
                 let counter = 0
                 console.log(evt.from)
                 evt.from.childNodes.forEach((element) => {
@@ -120,6 +122,15 @@ export class Tasks {
                     })
                 }
 
+                if(evt.to != evt.from){
+                    // if(el.status != userPageObject.tasksBlocks[el.div.parentNode.getAttribute('data-zone')].status){
+                    //     console.log()
+                    // }
+                    // el.status = userPageObject.tasksBlocks[el.div.parentNode.getAttribute('data-zone')].status
+                    // console.log(userPageObject.tasksBlocks[el.div.parentNode.getAttribute('data-zone')])
+                    console.log('to != from')
+                    console.log(evt.item)
+                } 
         
                 userPageObject.tasksBlocks.forEach((element) => {
                     element.tasks.forEach((el, index) => {
@@ -127,6 +138,7 @@ export class Tasks {
              
                     })
                 })
+
                 userPageObject.tasksBlocks.forEach((element) => {
                     let sortedArray = element.tasks.sort(function (a, b) {
                         return a.number - b.number; // for ascending order
@@ -146,14 +158,15 @@ export class Tasks {
                
 
                 userPageObject.tasksBlocks.forEach((element) => { //перебираем все объекты блоков с задачами
-                    //TODO - активировать FOOTER для актуализации данных в футере при перетаскивании
                     element.tasks.forEach((el) => { //перебираем все задачи
                         if (el.div.parentElement.getAttribute('data-zone') != el.block().dataZoneNumber) { //если в объекте задачи у родительского элемента дива data-zone не равен номеру data-zone-у блока, в котором находится объект задачи 
                             console.log(evt.newIndex)
-                            el.div.setAttribute('data-item', evt.newIndex)
-                            el.number = evt.newIndex; //то номеру задачи присваивается значение индекса перетаскиваемого элемента
+                            //el.div.setAttribute('data-item', evt.newIndex)
+                           // el.number = evt.newIndex; //то номеру задачи присваивается значение индекса перетаскиваемого элемента
                             el.status = userPageObject.tasksBlocks[evt.to.getAttribute('data-zone')].status //и статусу задачи присваивается значение статуса блокаЗадач, который находим значению data-zone списка(дива), в который задача была перенесена
-                            el.saveTask() //обращаемся к методу найденной задачи saveTask(), который создает и сохраняет специальный объект задачи в localStorage - находит в localStorage задачу по ID задачи - и перезаписывает внее новые данные
+                        //    el.saveTask() //обращаемся к методу найденной задачи saveTask(), который создает и сохраняет специальный объект задачи в localStorage - находит в localStorage задачу по ID задачи - и перезаписывает внее новые данные
+                        //   el.status = userPageObject.tasksBlocks[el.div.parentElement.getAttribute('data-zone')].status //и статусу задачи присваивается значение статуса блокаЗадач, который находим значению data-zone списка(дива), в который задача была перенесена
+
                         } else {
                             console.log('c[jlbncz')
                         }
@@ -169,6 +182,7 @@ export class Tasks {
                 // this.options.setData(dataTransfer, evt.item)
                 // console.log(dataTransfer)
                 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                footer.footerContent();
             },
         });
 
@@ -197,9 +211,23 @@ export class Tasks {
             this.flag = true;
         } else {
             this.submitAddCard.style.display = 'block';
-            this.flag = false;
+            this.flag = false;         
         }
+    }
 
+    addCardDisable(){
+        
+        if(this.status != 'Ready'){  
+            console.log(this.userPage.tasksBlocks[this.dataZoneNumber - 1].tasks)
+            if(this.userPage.tasksBlocks[this.dataZoneNumber - 1].tasks.length < 1){
+                console.log(this.userPage.tasksBlocks[this.dataZoneNumber - 1].tasks.length < 1)
+                console.log('disable')
+                this.submitAddCard.setAttribute('disabled', true)
+            }else{
+                console.log('able')
+                this.submitAddCard.removeAttribute('disabled')
+            }
+        }      
     }
 
 

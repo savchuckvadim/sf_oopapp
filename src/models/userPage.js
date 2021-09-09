@@ -37,6 +37,7 @@ export class UserPage {
         this.statusNames.forEach((element, index) => {
             this.tasksBlocks[index] = new Tasks(element, index, this)
             this.tasksBlocks[index].renderTasks()
+
         });
 
         this.renderRelevantTasks(appStateCurrentUser)
@@ -67,9 +68,16 @@ export class UserPage {
                 this.createAndDeleteTask(allRelevantTasksOfCurrentUser[i], this.tasksBlocks[2])
             }
         }
+        this.allAddCardDisplay()
+       
         footer.footerContent() //отрисовка footera с данными по задачам из localStorage
     }
 
+    allAddCardDisplay(){
+        this.tasksBlocks.forEach((element) => {
+            element.addCardDisable()
+        })
+    }
     createAndDeleteTask(oldTask, otherBlock) {
         otherBlock.createTask(oldTask.id)
         let thisTask = otherBlock.tasks[otherBlock.tasks.length - 1];
@@ -109,7 +117,7 @@ export class UserPage {
     clicky() {
         document.addEventListener('change', () => {
             this.tasksBlocks.forEach((element) => {
-                
+
             })
         })
     }

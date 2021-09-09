@@ -51,7 +51,7 @@ export class Task extends BaseModel {
 
         this.div.draggable = true;
         this.div.className = 'draggable-item'
-        
+
     }
 
 
@@ -139,8 +139,12 @@ export class Task extends BaseModel {
         let block = this.block();
         let tasksFromLocal = getFromStorage('tasks')
 
-        function deleteFromArray(array, number) {
-            array.splice(number, 1)
+        block.tasks.splice(this.number, 1)
+
+        for (let i = 0; i < tasksFromLocal.length; i++) {
+            if (tasksFromLocal[i].id == this.id) {
+                tasksFromLocal.splice(i, 1)
+            }
         }
 
         function updateNumbers(array) {
@@ -152,6 +156,9 @@ export class Task extends BaseModel {
             })
         }
 
+        updateNumbers(tasksFromLocal)
+        block.counter--;
+
         this.div.remove();
         this.form.remove()
         this.p.remove()
@@ -159,16 +166,11 @@ export class Task extends BaseModel {
         this.divSubmits.remove()
         this.submitDelete.remove()
 
-        deleteFromArray(block.tasks, this.number)
-        deleteFromArray(tasksFromLocal, this.number)
-        updateNumbers(block.tasks)
-        updateNumbers(tasksFromLocal)
-        block.counter--;
-
         localStorage.removeItem('tasks');
         tasksFromLocal.forEach((element) => {
             addToStorage(element, 'tasks')
         })
+        this.userPage.allAddCardDisplay()
     }
 
 
@@ -224,31 +226,19 @@ export class Task extends BaseModel {
                 allTasksFromLocalStorage[0] = task; //записывает специальный объект(без методов) текущей задачи единственным элементом
             }
 
-            //упорядочиваем массив задач в соответствии с number задач
-            let newTasksArray = [] //новый массив, в который будут помещены все задачи в новом порядке
-            let newAllTasksReady = [] // массив блока куда буду помещены упорядоченные задачи в соответствии с их статусом
-            let newAllTasksInProgress = [] // массив блока куда буду помещены упорядоченные задачи в соответствии с их статусом
-            let newAllTasksFinished = [] // массив блока куда буду помещены упорядоченные задачи в соответствии с их статусом
 
-            allTasksFromLocalStorage.forEach((element) => {
-                if (element.status == 'Ready') {
-                    newAllTasksReady[element.number] = element
-                } else if (element.status == 'InProgress') {
-                    newAllTasksInProgress[element.number] = element
-                } else if (element.status == 'Finished') {
-                    newAllTasksFinished[element.number] = element
-                }
-            })
+            // allTasksFromLocalStorage.sort(function (a, b) {
+            //     console.log('sort')
 
-            newTasksArray = newTasksArray.concat(newAllTasksReady)
-            newTasksArray = newTasksArray.concat(newAllTasksInProgress)
-            newTasksArray = newTasksArray.concat(newAllTasksFinished)
-
+            //     return a.number - b.number; 
+            // });
             localStorage.removeItem('tasks');
-            newTasksArray.forEach((element) => {
+            allTasksFromLocalStorage.forEach((element) => {
                 addToStorage(element, 'tasks')
             })
         }
+
+        this.userPage.allAddCardDisplay()
     }
 
 }

@@ -1,7 +1,8 @@
 import index from "../index.html"
 import {
-    addCurrentUser
-} from "../utils";
+    addCurrentUser,
+    searchUserInLocalStorage
+} from "../utils"
 import {
     changeState
 } from "../utils";
@@ -54,7 +55,10 @@ export function loadMainPage(app) {
         const formData = new FormData(loginForm);
         const login = formData.get("login");
         const password = formData.get("password");
-        
+        if(!searchUserInLocalStorage(login, password) ){
+            window.alert('Такого пользователя не существует! Для того, чтобы начать пользоваться введите login: admin, password: admin')
+
+        }
         addCurrentUser(login, password);
         changeState(); //меняет состояние на текущий пользователь, если он существует
         startApp();

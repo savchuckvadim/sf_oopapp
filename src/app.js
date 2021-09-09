@@ -31,7 +31,6 @@ export var users = getFromStorage('users'); // берет из localstorage ма
 export const footer = new Footer()
 
 
-
 export function startApp() {
 
   createAdminUser()
